@@ -1,0 +1,2542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OS // TOP 0.01% TRACKER</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080807;
+    --surface: #131311;
+    --surface2: #1c1c19;
+    --border: #343430;
+    --accent: #d4a96e;
+    --accent2: #f0cc82;
+    --red: #f06050;
+    --green: #60c060;
+    --yellow: #e0b040;
+    --text: #f0ede4;
+    --muted: #8a8a7c;
+    --dim: #484840;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* HEADER */
+  .header {
+    border-bottom: 1px solid var(--border);
+    padding: 24px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    background: rgba(10,10,8,0.96);
+    backdrop-filter: blur(12px);
+    z-index: 100;
+  }
+
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 4px;
+    color: var(--accent);
+  }
+
+  .logo span {
+    color: var(--muted);
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 2px;
+    display: block;
+    margin-top: -4px;
+  }
+
+  .header-stats {
+    display: flex;
+    gap: 32px;
+    align-items: center;
+  }
+
+  .stat-pill {
+    text-align: right;
+  }
+
+  .stat-pill .val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 2px;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .stat-pill .label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: #8a8a7c;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* COUNTDOWN */
+  .countdown-bar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 32px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .countdown-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+
+  .countdown-timer {
+    display: flex;
+    gap: 16px;
+  }
+
+  .time-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .time-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    line-height: 1;
+  }
+
+  .time-lbl {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  .progress-track {
+    flex: 1;
+    height: 3px;
+    background: var(--dim);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 2px;
+    transition: width 1s ease;
+  }
+
+  .progress-pct {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  /* MAIN LAYOUT */
+  .main {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    height: calc(100vh - 119px);
+    overflow: hidden;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    border-right: 1px solid var(--border);
+    padding: 20px 0;
+    height: 100%;
+    overflow-y: auto;
+    flex-shrink: 0;
+  }
+
+  .sidebar::-webkit-scrollbar { width: 3px; }
+  .sidebar::-webkit-scrollbar-track { background: transparent; }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--dim); border-radius: 2px; }
+
+  .layer-nav {
+    padding: 8px 0;
+  }
+
+  .layer-nav-header {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: #c8c0a0;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 8px 20px 6px;
+    margin-top: 12px;
+    cursor: pointer;
+    transition: color 0.15s;
+    border-left: 2px solid transparent;
+  }
+  .layer-nav-header:hover { color: var(--accent2); background: var(--surface); }
+  .layer-nav-header.active { color: var(--accent2); border-left-color: var(--accent); background: var(--surface); }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 20px;
+    cursor: pointer;
+    transition: all 0.15s;
+    border-left: 2px solid transparent;
+    text-decoration: none;
+    user-select: none;
+  }
+
+  .nav-item:hover {
+    background: var(--surface);
+    border-left-color: var(--dim);
+  }
+
+  .nav-item.active {
+    background: var(--surface);
+    border-left-color: var(--accent);
+  }
+
+  .nav-item .nav-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    width: 14px;
+  }
+
+  .nav-item .nav-text {
+    font-size: 13px;
+    color: #e0ddd4;
+    line-height: 1.3;
+  }
+
+  .nav-item .nav-pct {
+    margin-left: auto;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+  }
+
+  .nav-mini-bar {
+    width: 28px;
+    height: 2px;
+    background: var(--dim);
+    border-radius: 1px;
+    overflow: hidden;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  .nav-mini-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 1px;
+  }
+
+  /* CONTENT */
+  .content {
+    padding: 28px 32px 120px;
+    overflow-y: auto;
+    height: 100%;
+    background: var(--bg);
+  }
+
+  /* DOMAIN CARD */
+  .domain-section {
+    margin-bottom: 48px;
+  }
+
+  .domain-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .domain-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    color: var(--dim);
+    line-height: 1;
+    letter-spacing: 2px;
+  }
+
+  .domain-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    letter-spacing: 3px;
+    color: var(--text);
+    line-height: 1;
+  }
+
+  .domain-goal {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 1px;
+    margin-left: auto;
+  }
+
+  .domain-progress-bar {
+    width: 80px;
+    height: 2px;
+    background: var(--dim);
+    border-radius: 1px;
+    overflow: hidden;
+  }
+
+  .domain-progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 1px;
+    transition: width 0.5s ease;
+  }
+
+  /* RESOURCE GRID */
+  .resource-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 14px;
+  }
+
+  .resource-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .resource-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--dim);
+    transition: all 0.15s;
+  }
+
+  .resource-card:hover {
+    border-color: var(--accent);
+    background: var(--surface2);
+  }
+
+  .resource-card:hover::before {
+    background: var(--accent);
+  }
+
+  .resource-card.done::before {
+    background: var(--green);
+  }
+
+  .resource-card.done {
+    border-color: #2a3a2a;
+    opacity: 0.7;
+  }
+
+  .resource-card.in-progress::before {
+    background: var(--yellow);
+  }
+
+  .resource-card.in-progress {
+    border-color: #3a3020;
+  }
+
+  .resource-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+
+  .resource-type {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 2px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .type-book { background: #1e1e38; color: #9898e8; }
+  .type-blog { background: #252010; color: #e0b838; }
+  .type-video { background: #281414; color: #e86060; }
+  .type-practice { background: #102010; color: #60e060; }
+  .type-study { background: #201828; color: #c088e8; }
+  .type-observe { background: #221c10; color: #d0a870; }
+
+  .resource-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #f4f1e8;
+    line-height: 1.3;
+  }
+
+  .resource-author {
+    font-size: 13px;
+    color: #7a7a6e;
+    margin-top: 2px;
+  }
+
+  .resource-insight {
+    font-size: 13.5px;
+    color: #a8a898;
+    line-height: 1.65;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--dim);
+  }
+
+  .resource-actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 12px;
+  }
+
+  .btn-status {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    padding: 6px 12px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    background: transparent;
+    color: #909080;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-status:hover { color: var(--text); border-color: #909080; }
+  .btn-status.active-done { border-color: var(--green); color: var(--green); background: rgba(92,168,90,0.08); }
+  .btn-status.active-wip { border-color: var(--yellow); color: var(--yellow); background: rgba(212,168,67,0.08); }
+  .btn-status.active-queued { border-color: var(--muted); color: var(--muted); }
+
+  .btn-note {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    padding: 6px 12px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-left: auto;
+  }
+
+  .btn-note:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* NOTES PANEL */
+  .notes-panel {
+    position: fixed;
+    right: -440px;
+    top: 0;
+    width: 440px;
+    height: 100vh;
+    background: var(--surface);
+    border-left: 1px solid var(--border);
+    z-index: 200;
+    transition: right 0.3s ease;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .notes-panel.open { right: 0; }
+
+  .notes-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .notes-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .notes-close {
+    background: none;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+    transition: color 0.15s;
+  }
+
+  .notes-close:hover { color: var(--text); }
+
+  .notes-resource-name {
+    padding: 16px 24px;
+    font-size: 14px;
+    font-weight: 500;
+    border-bottom: 1px solid var(--dim);
+    color: var(--text);
+  }
+
+  .notes-fields {
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  .field-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .field-textarea {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 10px 12px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    resize: vertical;
+    min-height: 80px;
+    transition: border-color 0.15s;
+  }
+
+  .field-textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+
+  .field-textarea::placeholder { color: var(--dim); }
+
+  .notes-save {
+    margin: 0 24px 24px;
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    padding: 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: background 0.15s;
+    font-weight: 500;
+  }
+
+  .notes-save:hover { background: var(--accent2); }
+
+  /* DASHBOARD TAB */
+  .tab-bar {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    padding: 0 36px;
+    background: var(--surface);
+  }
+
+  .tab {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 14px 0;
+    margin-right: 28px;
+    cursor: pointer;
+    color: var(--muted);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: all 0.15s;
+  }
+
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* DASHBOARD PANEL — handled by full-width panel block below */
+
+  .dash-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .dash-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 20px;
+  }
+
+  .dash-card-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    line-height: 1;
+  }
+
+  .dash-card-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  .dash-section-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    margin-top: 28px;
+  }
+
+  .layer-overview-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .layer-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 16px;
+  }
+
+  .layer-card-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 10px;
+  }
+
+  .layer-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .layer-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .layer-bar-name {
+    font-size: 11px;
+    color: var(--muted);
+    width: 140px;
+    flex-shrink: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .layer-bar-track {
+    flex: 1;
+    height: 4px;
+    background: var(--dim);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .layer-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.5s ease;
+  }
+
+  .fill-done { background: var(--green); }
+  .fill-wip { background: var(--yellow); }
+  .fill-none { background: var(--dim); }
+
+  .layer-bar-pct {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    width: 28px;
+    text-align: right;
+  }
+
+  /* WEEKLY LOG */
+  .week-log {
+    margin-top: 8px;
+  }
+
+  .week-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+  }
+
+  .week-day {
+    aspect-ratio: 1;
+    border-radius: 2px;
+    background: var(--dim);
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    color: var(--muted);
+  }
+
+  .week-day:hover { opacity: 0.8; }
+  .week-day.level-1 { background: #1a2e1a; color: #406040; }
+  .week-day.level-2 { background: #204020; color: #5a8a5a; }
+  .week-day.level-3 { background: #2a5a2a; color: #7ab07a; }
+  .week-day.level-4 { background: var(--green); color: var(--bg); }
+
+  .week-day-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 4px;
+  }
+
+  .week-labels {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    margin-bottom: 4px;
+  }
+
+  /* DOMINANCE LOG */
+  .dominance-entry {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin-bottom: 8px;
+  }
+
+  .dominance-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  .dominance-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+  }
+
+  .dominance-score {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    color: var(--accent);
+    letter-spacing: 2px;
+  }
+
+  .add-log-btn {
+    width: 100%;
+    background: transparent;
+    border: 1px dashed var(--dim);
+    border-radius: 4px;
+    padding: 14px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .add-log-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* VERDICT BOX */
+  .verdict-box {
+    background: var(--surface);
+    border: 1px solid var(--accent);
+    border-radius: 4px;
+    padding: 16px 20px;
+    margin-bottom: 28px;
+  }
+
+  .verdict-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .verdict-text {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  /* MODAL for log entry */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 300;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    width: 480px;
+    padding: 28px;
+  }
+
+  .modal-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+
+  .modal-field { margin-bottom: 16px; }
+
+  .modal-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  .modal-cancel {
+    flex: 1;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 11px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s;
+  }
+
+  .modal-cancel:hover { border-color: var(--muted); color: var(--text); }
+
+  .modal-confirm {
+    flex: 2;
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    padding: 11px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 2px;
+    font-weight: 600;
+    transition: background 0.15s;
+  }
+
+  .modal-confirm:hover { background: var(--accent2); }
+
+  .score-selector {
+    display: flex;
+    gap: 8px;
+  }
+
+  .score-btn {
+    flex: 1;
+    padding: 10px 4px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    border-radius: 2px;
+    cursor: pointer;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    transition: all 0.15s;
+  }
+
+  .score-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .score-btn.selected { background: var(--accent); border-color: var(--accent); color: var(--bg); font-weight: 600; }
+
+  /* SCROLLBAR */
+  .content::-webkit-scrollbar { width: 3px; }
+  .content::-webkit-scrollbar-track { background: transparent; }
+  .content::-webkit-scrollbar-thumb { background: var(--dim); border-radius: 2px; }
+
+  /* FULL-WIDTH PANELS (dashboard + log) */
+  #dashboard-panel,
+  #log-panel {
+    display: none;
+    width: 100%;
+    min-height: calc(100vh - 119px);
+    padding: 28px 48px 120px;
+    background: var(--bg);
+    overflow-y: auto;
+  }
+
+  /* SECTION VIEW */
+  #tracker-panel { display: block; }
+
+  /* SEPARATOR */
+  .section-separator {
+    height: 1px;
+    background: var(--dim);
+    margin: 32px 0;
+  }
+
+  /* ANCHOR — scroll within content div */
+  .domain-anchor { scroll-margin-top: 20px; }
+
+  /* BADGE */
+  .streak-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(200,169,110,0.1);
+    border: 1px solid rgba(200,169,110,0.3);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+  }
+
+  .dot-live {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* ELITE STATUS LABEL */
+  .elite-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 10px 32px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    z-index: 50;
+  }
+
+  .elite-message {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    flex: 1;
+    text-align: center;
+  }
+
+  .elite-message span { color: var(--accent); }
+
+  /* ── MENTAL MODEL DRAWER ── */
+  .mm-drawer { position: fixed; right: -500px; top: 0; width: 480px; height: 100vh; background: var(--surface); border-left: 1px solid var(--border); z-index: 250; transition: right 0.3s cubic-bezier(.4,0,.2,1); display: flex; flex-direction: column; overflow: hidden; }
+  .mm-drawer.open { right: 0; }
+  .mm-drawer-header { padding: 18px 20px 0; flex-shrink: 0; }
+  .mm-drawer-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+  .mm-drawer-badge { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--accent); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 4px; }
+  .mm-drawer-title { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 2px; color: var(--text); line-height: 1.1; }
+  .mm-drawer-author { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); margin-top: 2px; }
+  .mm-drawer-close { background: none; border: 1px solid var(--border); border-radius: 2px; color: var(--muted); cursor: pointer; font-size: 14px; padding: 4px 10px; transition: all 0.15s; flex-shrink: 0; }
+  .mm-drawer-close:hover { color: var(--text); border-color: var(--muted); }
+  .mm-tabs { display: flex; border-bottom: 1px solid var(--border); padding: 0; margin-bottom: 0; }
+  .mm-tab { flex: 1; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; padding: 10px 4px; text-align: center; cursor: pointer; color: var(--muted); border-bottom: 2px solid transparent; transition: all 0.15s; user-select: none; }
+  .mm-tab:hover { color: var(--text); }
+  .mm-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .mm-body { flex: 1; overflow-y: auto; padding: 20px; }
+  .mm-body::-webkit-scrollbar { width: 3px; }
+  .mm-body::-webkit-scrollbar-thumb { background: var(--dim); border-radius: 2px; }
+  .mm-pane { display: none; }
+  .mm-pane.active { display: block; animation: mmFade 0.15s ease; }
+  @keyframes mmFade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+  .mm-shift-box { background: rgba(200,169,110,0.07); border-left: 3px solid var(--accent); border-radius: 0 4px 4px 0; padding: 14px 16px; font-size: 13px; color: var(--text); line-height: 1.75; }
+  .mm-item { padding: 12px 0; border-bottom: 1px solid var(--dim); }
+  .mm-item:last-child { border-bottom: none; }
+  .mm-item-label { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px; }
+  .mm-item-text { font-size: 12.5px; color: #b0ae9f; line-height: 1.65; }
+  .mm-step { display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--dim); align-items: flex-start; }
+  .mm-step:last-child { border-bottom: none; }
+  .mm-step-num { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: var(--accent); letter-spacing: 2px; line-height: 1; flex-shrink: 0; width: 24px; }
+  .mm-step-text { font-size: 12.5px; color: var(--text); line-height: 1.65; padding-top: 2px; }
+  .mm-unlock-box { background: rgba(92,168,90,0.06); border: 1px solid rgba(92,168,90,0.2); border-radius: 4px; padding: 14px 16px; font-size: 13px; color: var(--text); line-height: 1.75; margin-bottom: 12px; }
+  .mm-buy-box { background: var(--bg); border: 1px solid var(--border); border-radius: 4px; padding: 12px 14px; }
+  .mm-buy-label { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
+  .mm-buy-text { font-size: 12px; color: var(--muted); line-height: 1.6; }
+  .mm-placeholder { text-align: center; padding: 40px 20px; font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); line-height: 2; }
+
+  /* ── PERSONAL PATHWAY ── */
+  .btn-upload-ebook { display: inline-flex; align-items: center; gap: 7px; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; padding: 8px 16px; background: rgba(200,169,110,0.1); border: 1px solid rgba(200,169,110,0.4); border-radius: 3px; color: var(--accent); cursor: pointer; transition: all 0.15s; }
+  .btn-upload-ebook:hover { background: rgba(200,169,110,0.2); border-color: var(--accent); }
+  .pp-empty { border: 1px dashed var(--dim); border-radius: 4px; padding: 32px; text-align: center; color: var(--muted); font-family: 'DM Mono', monospace; font-size: 11px; line-height: 2; }
+  .resource-card.personal::before { background: #7878cc; }
+  .resource-card.personal { border-color: #2a2a3a; }
+
+  /* ── EBOOK MODAL ── */
+  .ebook-modal { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; width: 520px; max-height: 90vh; overflow-y: auto; padding: 28px; }
+  .ebook-modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 3px; color: var(--accent); margin-bottom: 4px; }
+  .ebook-modal-sub { font-size: 12px; color: var(--muted); margin-bottom: 20px; line-height: 1.6; }
+  .upload-zone { border: 1px dashed var(--border); border-radius: 4px; padding: 24px 16px; text-align: center; cursor: pointer; transition: all 0.15s; margin-bottom: 16px; }
+  .upload-zone:hover, .upload-zone.dragover { border-color: var(--accent); background: rgba(200,169,110,0.04); }
+  .upload-zone-icon { font-size: 28px; margin-bottom: 8px; }
+  .upload-zone-text { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 1px; line-height: 1.8; }
+  .upload-zone-text span { color: var(--accent); }
+  .upload-file-name { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--green); margin-top: 8px; }
+  .ebook-generating { display: none; text-align: center; padding: 16px 0; }
+  .ebook-generating.active { display: block; }
+  .gen-spinner { width: 28px; height: 28px; border: 2px solid var(--dim); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 10px; }
+  .gen-status { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 1px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .main { grid-template-columns: 1fr; }
+    .sidebar { display: none !important; }
+    .resource-grid { grid-template-columns: 1fr; }
+    .dash-grid { grid-template-columns: 1fr 1fr; }
+    .layer-overview-grid { grid-template-columns: 1fr; }
+    #dashboard-panel, #log-panel { padding: 20px 16px 80px; }
+    .header-stats { gap: 12px; }
+    .streak-badge { display: none; }
+    .mm-drawer { width: 100vw; right: -100vw; }
+  }
+
+  /* ── MODEL READER ── */
+  .reader-overlay {
+    display: none; position: fixed; inset: 0; background: var(--bg);
+    z-index: 500; overflow-y: auto;
+  }
+  .reader-overlay.open { display: block; }
+  .reader-wrap { max-width: 780px; margin: 0 auto; padding: 32px 24px 80px; }
+  .reader-close-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 28px; padding-bottom: 16px; border-bottom: 1px solid var(--border);
+  }
+  .reader-close-btn {
+    font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2px;
+    text-transform: uppercase; padding: 8px 16px; background: transparent;
+    border: 1px solid var(--border); border-radius: 2px; color: var(--muted);
+    cursor: pointer; transition: all 0.15s;
+  }
+  .reader-close-btn:hover { color: var(--text); border-color: var(--muted); }
+  .reader-book-label {
+    font-family: 'DM Mono', monospace; font-size: 9px; color: var(--muted);
+    letter-spacing: 3px; text-transform: uppercase;
+  }
+  .reader-header { margin-bottom: 24px; }
+  .reader-title {
+    font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 3px;
+    color: var(--text); line-height: 1.1; margin-bottom: 4px;
+  }
+  .reader-author {
+    font-family: 'DM Mono', monospace; font-size: 11px; color: var(--accent);
+    letter-spacing: 2px; margin-bottom: 12px;
+  }
+  .reader-tagline {
+    font-size: 15px; color: var(--muted); line-height: 1.6; font-style: italic;
+    border-left: 2px solid var(--accent); padding-left: 12px;
+  }
+  .reader-core {
+    background: rgba(200,169,110,0.08); border: 1px solid rgba(200,169,110,0.25);
+    border-radius: 4px; padding: 16px 20px; margin-bottom: 28px;
+  }
+  .reader-core-label {
+    font-family: 'DM Mono', monospace; font-size: 9px; color: var(--accent);
+    letter-spacing: 3px; text-transform: uppercase; margin-bottom: 6px;
+  }
+  .reader-core-text {
+    font-size: 14px; color: var(--text); line-height: 1.7; font-weight: 500;
+  }
+  .reader-part { margin-bottom: 32px; }
+  .reader-part-label {
+    font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 700;
+    letter-spacing: 4px; text-transform: uppercase; color: var(--muted);
+    padding: 6px 0; border-bottom: 1px solid var(--dim); margin-bottom: 16px;
+  }
+  .reader-concept {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 4px;
+    padding: 16px 18px; margin-bottom: 10px;
+    border-left: 3px solid var(--dim); transition: border-left-color 0.15s;
+  }
+  .reader-concept:hover { border-left-color: var(--accent); }
+  .reader-concept-title {
+    font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 2px;
+    color: var(--text); margin-bottom: 6px;
+  }
+  .reader-concept-core {
+    font-size: 12.5px; color: var(--text); line-height: 1.6; margin-bottom: 12px;
+    font-style: italic; color: #b8b6ad;
+  }
+  .reader-cols { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  @media (max-width: 640px) { .reader-cols { grid-template-columns: 1fr; } }
+  .reader-col-head {
+    font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: 2px;
+    text-transform: uppercase; margin-bottom: 6px; font-weight: 700;
+  }
+  .reader-col-head.ki { color: #7878cc; }
+  .reader-col-head.ex { color: var(--green); }
+  .reader-col-head.av { color: var(--red); }
+  .reader-bullet-list { list-style: none; padding: 0; margin: 0; }
+  .reader-bullet-list li {
+    font-size: 12px; color: var(--muted); line-height: 1.55;
+    padding: 3px 0 3px 12px; position: relative;
+  }
+  .reader-bullet-list li::before {
+    content: '·'; position: absolute; left: 2px; color: var(--dim);
+  }
+  .reader-bullet-list.ex li::before { content: '→'; color: var(--green); left: 0; }
+  .reader-bullet-list.av li::before { content: '✕'; color: var(--red); left: 0; font-size: 10px; }
+  .reader-bottom {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 4px;
+    padding: 16px 20px; margin-top: 28px;
+  }
+  .reader-bottom-label {
+    font-family: 'DM Mono', monospace; font-size: 9px; color: var(--accent);
+    letter-spacing: 3px; text-transform: uppercase; margin-bottom: 10px;
+  }
+  .reader-bottom-list { list-style: none; padding: 0; }
+  .reader-bottom-list li {
+    font-size: 13px; color: var(--text); line-height: 1.6;
+    padding: 5px 0 5px 16px; position: relative; border-bottom: 1px solid var(--dim);
+  }
+  .reader-bottom-list li:last-child { border-bottom: none; }
+  .reader-bottom-list li::before {
+    content: '⚡'; position: absolute; left: 0; font-size: 10px; top: 6px;
+  }
+  .btn-read-model {
+    font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 1px;
+    padding: 5px 10px; border: 1px solid rgba(200,169,110,0.4); border-radius: 2px;
+    background: rgba(200,169,110,0.07); color: var(--accent); cursor: pointer;
+    transition: all 0.15s; margin-top: 8px; width: 100%;
+  }
+  .btn-read-model:hover { background: rgba(200,169,110,0.15); border-color: var(--accent); }
+
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="logo">
+    OS
+    <span>TOP 0.01% · 4 YEAR WAR</span>
+  </div>
+  <div class="header-stats">
+    <div class="stat-pill">
+      <div class="val" id="total-done">0</div>
+      <div class="label">Completed</div>
+    </div>
+    <div class="stat-pill">
+      <div class="val" id="total-wip">0</div>
+      <div class="label">In Progress</div>
+    </div>
+    <div class="stat-pill">
+      <div class="val" id="total-pct">0%</div>
+      <div class="label">Domination</div>
+    </div>
+    <div class="streak-badge">
+      <div class="dot-live"></div>
+      <span id="streak-val">0</span> day streak
+    </div>
+  </div>
+</header>
+
+<!-- COUNTDOWN BAR -->
+<div class="countdown-bar">
+  <div class="countdown-label">Mission Clock</div>
+  <div class="countdown-timer">
+    <div class="time-unit"><div class="time-val" id="cd-days">1460</div><div class="time-lbl">DAYS</div></div>
+    <div class="time-unit"><div class="time-val" id="cd-hours">00</div><div class="time-lbl">HRS</div></div>
+    <div class="time-unit"><div class="time-val" id="cd-mins">00</div><div class="time-lbl">MIN</div></div>
+    <div class="time-unit"><div class="time-val" id="cd-secs">00</div><div class="time-lbl">SEC</div></div>
+  </div>
+  <div class="progress-track">
+    <div class="progress-fill" id="mission-progress" style="width:0%"></div>
+  </div>
+  <div class="progress-pct" id="mission-pct">0% elapsed</div>
+</div>
+
+<!-- TAB BAR -->
+<div class="tab-bar">
+  <div class="tab active" onclick="switchTab('tracker')">TRACKER</div>
+  <div class="tab" onclick="switchTab('dashboard')">COMMAND DASHBOARD</div>
+  <div class="tab" onclick="switchTab('log')">DOMINANCE LOG</div>
+</div>
+
+<!-- MAIN — Tracker only (sidebar + content) -->
+<div class="main" id="main-grid">
+  <!-- SIDEBAR -->
+  <nav class="sidebar" id="sidebar">
+    <!-- ALL LAYERS button -->
+    <div style="padding:12px 20px 4px;">
+      <button onclick="selectLayer('ALL', null)" id="btn-all-layers" style="width:100%;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:7px 12px;background:rgba(212,169,110,0.12);border:1px solid rgba(212,169,110,0.4);border-radius:3px;color:var(--accent2);cursor:pointer;transition:all 0.15s;" onmouseover="this.style.background='rgba(212,169,110,0.2)'" onmouseout="this.style.background='rgba(212,169,110,0.12)'">⊞ ALL LAYERS</button>
+    </div>
+    <div class="layer-nav-header" onclick="selectLayer('L1',this)" data-layer="L1">Layer 1 · Core</div>
+    <div class="nav-item" data-target="d1" onclick="navTo(this)"><span class="nav-num">01</span><span class="nav-text">Truth & Epistemology</span><div class="nav-mini-bar"><div class="nav-mini-fill" id="nav-fill-d1" style="width:0%"></div></div></div>
+    <div class="nav-item" data-target="d2" onclick="navTo(this)"><span class="nav-num">02</span><span class="nav-text">Self-Mastery</span><div class="nav-mini-bar"><div class="nav-mini-fill" id="nav-fill-d2" style="width:0%"></div></div></div>
+    <div class="nav-item" data-target="d3" onclick="navTo(this)"><span class="nav-num">03</span><span class="nav-text">Energy & Physiology</span><div class="nav-mini-bar"><div class="nav-mini-fill" id="nav-fill-d3" style="width:0%"></div></div></div>
+    <div class="nav-item" data-target="d4" onclick="navTo(this)"><span class="nav-num">04</span><span class="nav-text">Focus & Cognition</span><div class="nav-mini-bar"><div class="nav-mini-fill" id="nav-fill-d4" style="width:0%"></div></div></div>
+    <div class="nav-item" data-target="d5" onclick="navTo(this)"><span class="nav-num">05</span><span class="nav-text">Learning Systems</span><div class="nav-mini-bar"><div class="nav-mini-fill" id="nav-fill-d5" style="width:0%"></div></div></div>
+    <div class="layer-nav-header" onclick="selectLayer('L2',this)" data-layer="L2">Layer 2 · Human Leverage</div>
+    <div class="nav-item" data-target="d6" onclick="navTo(this)"><span class="nav-num">06</span><span class="nav-text">Communication</span><div class="nav-mini-bar"><div class="nav-mini-fill" id="nav-fill-d6" style="width:0%"></div></div></div>
+    <div class="nav-item" data-target="d7" onclick="navTo(this)"><span class="nav-num">07</span><span class="nav-text">Persuasion & Negotiation</span><div class="nav-mini-bar"><div class="nav-mini-fill" id="nav-fill-d7" style="width:0%"></div></div></div>
+    <div class="nav-item" data-target="d8" onclick="navTo(this)"><span class="nav-num">08</span><span class="nav-text">Psychology</span><div class="nav-mini-bar"><div class="nav-mini-fill" id="nav-fill-d8" style="width:0%"></div></div></div>
+    <div class="nav-item" data-target="d9" onclick="navTo(this)"><span class="nav-num">09</span><span class="nav-text">Power & Game Theory</span><div class="nav-mini-bar"><div class="nav-mini-fill" id="nav-fill-d9" style="width:0%"></div></div></div>
+    <div class="nav-item" data-target="d10" onclick="navTo(this)"><span class="nav-num">10</span><span class="nav-text">Network Design</span><div class="nav-mini-bar"><div class="nav-mini-fill" id="nav-fill-d10" style="width:0%"></div></div></div>
+    <div class="layer-nav-header" onclick="selectLayer('L3',this)" data-layer="L3">Layer 3 · Wealth Engine</div>
+    <div class="nav-item" data-target="d11" onclick="navTo(this)"><span class="nav-num">11</span><span class="nav-text">Business Strategy</span><div class="nav-mini-bar"><div class="nav-mini-fill" id="nav-fill-d11" style="width:0%"></div></div></div>
+    <div class="nav-item" data-target="d12" onclick="navTo(this)"><span class="nav-num">12</span><span class="nav-text">Sales</span><div class="nav-mini-bar"><div class="nav-mini-fill" id="nav-fill-d12" style="width:0%"></div></div></div>
+    <div class="nav-item" data-target="d13" onclick="navTo(this)"><span class="nav-num">13</span><span class="nav-text">Marketing & Attention</span><div class="nav-mini-bar"><div class="nav-mini-fill" id="nav-fill-d13" style="width:0%"></div></div></div>
+    <div class="nav-item" data-target="d14" onclick="navTo(this)"><span class="nav-num">14</span><span class="nav-text">Leverage</span><div class="nav-mini-bar"><div class="nav-mini-fill" id="nav-fill-d14" style="width:0%"></div></div></div>
+    <div class="nav-item" data-target="d15" onclick="navTo(this)"><span class="nav-num">15</span><span class="nav-text">Capital Allocation</span><div class="nav-mini-bar"><div class="nav-mini-fill" id="nav-fill-d15" style="width:0%"></div></div></div>
+    <div class="nav-item" data-target="d16" onclick="navTo(this)"><span class="nav-num">16</span><span class="nav-text">Systems & Operations</span><div class="nav-mini-bar"><div class="nav-mini-fill" id="nav-fill-d16" style="width:0%"></div></div></div>
+    <div class="layer-nav-header" onclick="selectLayer('L4',this)" data-layer="L4">Layer 4 · Stability</div>
+    <div class="nav-item" data-target="d17" onclick="navTo(this)"><span class="nav-num">17</span><span class="nav-text">Philosophy & Meaning</span><div class="nav-mini-bar"><div class="nav-mini-fill" id="nav-fill-d17" style="width:0%"></div></div></div>
+    <div class="nav-item" data-target="d18" onclick="navTo(this)"><span class="nav-num">18</span><span class="nav-text">Identity & Narrative</span><div class="nav-mini-bar"><div class="nav-mini-fill" id="nav-fill-d18" style="width:0%"></div></div></div>
+    <div class="layer-nav-header" onclick="selectLayer('L5',this)" data-layer="L5">Bonus · Ultra-Elite</div>
+    <div class="nav-item" data-target="d19" onclick="navTo(this)"><span class="nav-num">19</span><span class="nav-text">Taste & Aesthetics</span><div class="nav-mini-bar"><div class="nav-mini-fill" id="nav-fill-d19" style="width:0%"></div></div></div>
+    <div class="nav-item" data-target="d20" onclick="navTo(this)"><span class="nav-num">20</span><span class="nav-text">Timing & Luck</span><div class="nav-mini-bar"><div class="nav-mini-fill" id="nav-fill-d20" style="width:0%"></div></div></div>
+    <div class="nav-item" data-target="d21" onclick="navTo(this)"><span class="nav-num">21</span><span class="nav-text">Resilience Under Pressure</span><div class="nav-mini-bar"><div class="nav-mini-fill" id="nav-fill-d21" style="width:0%"></div></div></div>
+    <div class="nav-item" data-target="d22" onclick="navTo(this)"><span class="nav-num">22</span><span class="nav-text">Speed of Execution</span><div class="nav-mini-bar"><div class="nav-mini-fill" id="nav-fill-d22" style="width:0%"></div></div></div>
+    <div class="layer-nav-header" onclick="selectLayer('L6',this)" data-layer="L6">★ Personal Pathway</div>
+    <div class="nav-item" data-target="d_pp" onclick="navTo(this)"><span class="nav-num" style="color:var(--accent)">★</span><span class="nav-text" style="color:var(--accent)">My Books</span><div class="nav-mini-bar"><div class="nav-mini-fill" id="nav-fill-d_pp" style="width:0%"></div></div></div>
+  </nav>
+
+  <!-- TRACKER CONTENT -->
+  <div class="content" id="main-content">
+    <div id="tracker-panel"></div>
+  </div>
+</div>
+
+<!-- DASHBOARD PANEL — full width, outside .main -->
+<div id="dashboard-panel">
+  <div class="verdict-box">
+    <div class="verdict-label">OS // Current Verdict</div>
+    <div class="verdict-text" id="verdict-text">Begin logging. Until you have data, you have hope — not a plan.</div>
+  </div>
+  <div class="dash-section-title">Overview</div>
+  <div class="dash-grid">
+    <div class="dash-card">
+      <div class="dash-card-val" id="dash-done">0</div>
+      <div class="dash-card-label">Resources Completed</div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-card-val" id="dash-wip">0</div>
+      <div class="dash-card-label">Currently Active</div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-card-val" id="dash-total">0</div>
+      <div class="dash-card-label">Total Resources</div>
+    </div>
+  </div>
+  <div class="dash-section-title">Domain Breakdown</div>
+  <div class="layer-overview-grid" id="layer-overview"></div>
+</div>
+
+<!-- LOG PANEL — full width, outside .main -->
+<div id="log-panel">
+  <div class="verdict-box">
+    <div class="verdict-label">DOMINANCE LOG — Rule</div>
+    <div class="verdict-text">Every day you don't log is a day you lied to yourself. Log or accept mediocrity.</div>
+  </div>
+  <div class="dash-section-title">Weekly Activity (Last 28 Days)</div>
+  <div class="week-labels" id="week-labels"></div>
+  <div class="week-grid" id="week-grid"></div>
+  <div class="dash-section-title" style="margin-top:28px;">Daily Entries</div>
+  <div id="log-entries"></div>
+  <button class="add-log-btn" onclick="openLogModal()">+ LOG TODAY</button>
+</div>
+
+<!-- ── MODEL READER PANEL ── -->
+<div class="reader-overlay" id="reader-overlay">
+  <div class="reader-wrap">
+    <div class="reader-close-bar">
+      <div class="reader-book-label" id="reader-book-label">PERSONAL PATHWAY · MENTAL MODEL</div>
+      <button class="reader-close-btn" onclick="closeReader()">← BACK TO TRACKER</button>
+    </div>
+    <div class="reader-header">
+      <div class="reader-title" id="reader-title"></div>
+      <div class="reader-author" id="reader-author"></div>
+      <div class="reader-tagline" id="reader-tagline"></div>
+    </div>
+    <div class="reader-core" id="reader-core-box">
+      <div class="reader-core-label">CORE IDEA</div>
+      <div class="reader-core-text" id="reader-core-text"></div>
+    </div>
+    <div id="reader-parts"></div>
+    <div class="reader-bottom" id="reader-bottom">
+      <div class="reader-bottom-label">BOTTOM LINE</div>
+      <ul class="reader-bottom-list" id="reader-bottom-list"></ul>
+    </div>
+  </div>
+</div>
+
+<!-- ── EBOOK UPLOAD MODAL ── -->
+<div class="modal-overlay" id="ebook-modal">
+  <div class="ebook-modal">
+    <div class="ebook-modal-title">ADD FROM EBOOK</div>
+    <div class="ebook-modal-sub">Upload any book (PDF or TXT). Claude reads it and generates a full mental model — Core Shift, Frameworks, Execution Steps — added to your Personal Pathway.</div>
+
+    <div class="upload-zone" id="upload-zone"
+      onclick="document.getElementById('ebook-file-input').click()"
+      ondragover="handleDragOver(event)"
+      ondrop="handleDrop(event)"
+      ondragleave="document.getElementById('upload-zone').classList.remove('dragover')">
+      <div class="upload-zone-icon">📖</div>
+      <div class="upload-zone-text">Drop PDF or TXT here, or <span>click to browse</span></div>
+      <div class="upload-file-name" id="upload-file-name"></div>
+    </div>
+    <input type="file" id="ebook-file-input" accept=".pdf,.txt" style="display:none" onchange="handleFileSelect(this)">
+
+    <div class="modal-field">
+      <div class="field-label">Book Title</div>
+      <input type="text" class="field-textarea" id="ebook-title" placeholder="Enter book title" style="height:auto;min-height:unset;padding:10px 12px;resize:none;" />
+    </div>
+    <div class="modal-field">
+      <div class="field-label">Author</div>
+      <input type="text" class="field-textarea" id="ebook-author" placeholder="Author name" style="height:auto;min-height:unset;padding:10px 12px;resize:none;" />
+    </div>
+
+    <div class="ebook-generating" id="ebook-generating">
+      <div class="gen-spinner"></div>
+      <div class="gen-status" id="gen-status">Extracting intelligence from your book...</div>
+    </div>
+
+    <div class="modal-row" id="ebook-modal-btns">
+      <button class="modal-cancel" onclick="closeEbookModal()">CANCEL</button>
+      <button class="modal-confirm" onclick="generateMentalModel()">⚡ GENERATE MODEL</button>
+    </div>
+  </div>
+</div>
+
+<!-- NOTES PANEL -->
+<div class="notes-panel" id="notes-panel">
+  <div class="notes-header">
+    <div class="notes-title">Field Notes</div>
+    <button class="notes-close" onclick="closeNotes()">✕</button>
+  </div>
+  <div class="notes-resource-name" id="notes-resource-name">—</div>
+  <div class="notes-fields">
+    <div class="modal-field">
+      <div class="field-label">Key Insight Extracted</div>
+      <textarea class="field-textarea" id="note-insight" rows="3" placeholder="What's the single most useful idea you pulled from this?"></textarea>
+    </div>
+    <div class="modal-field">
+      <div class="field-label">How You'll Apply It</div>
+      <textarea class="field-textarea" id="note-apply" rows="3" placeholder="Concrete application in your context. Be specific."></textarea>
+    </div>
+    <div class="modal-field">
+      <div class="field-label">What It Changed in Your Thinking</div>
+      <textarea class="field-textarea" id="note-change" rows="3" placeholder="Before vs after. What model was updated?"></textarea>
+    </div>
+    <div class="modal-field">
+      <div class="field-label">Who You'd Fight With About This</div>
+      <textarea class="field-textarea" id="note-fight" rows="2" placeholder="Where would you disagree with the author or the consensus view?"></textarea>
+    </div>
+  </div>
+  <button class="notes-save" onclick="saveNotes()">SAVE FIELD NOTES</button>
+</div>
+
+<!-- LOG MODAL -->
+<div class="modal-overlay" id="log-modal">
+  <div class="modal">
+    <div class="modal-title">DAILY LOG ENTRY</div>
+    <div class="modal-field">
+      <div class="field-label">What you worked on</div>
+      <textarea class="field-textarea" id="log-worked" rows="3" placeholder="Resources, domains, or skills touched today."></textarea>
+    </div>
+    <div class="modal-field">
+      <div class="field-label">Key decision or insight</div>
+      <textarea class="field-textarea" id="log-insight" rows="2" placeholder="One thing that shifted your view or moved the needle."></textarea>
+    </div>
+    <div class="modal-field">
+      <div class="field-label">Tomorrow's single priority</div>
+      <textarea class="field-textarea" id="log-tomorrow" rows="2" placeholder="One thing. Not five. One."></textarea>
+    </div>
+    <div class="modal-field">
+      <div class="field-label">Dominance Score (1–10)</div>
+      <div class="score-selector" id="score-selector">
+        <button class="score-btn" onclick="selectScore(this,1)">1</button>
+        <button class="score-btn" onclick="selectScore(this,2)">2</button>
+        <button class="score-btn" onclick="selectScore(this,3)">3</button>
+        <button class="score-btn" onclick="selectScore(this,4)">4</button>
+        <button class="score-btn" onclick="selectScore(this,5)">5</button>
+        <button class="score-btn" onclick="selectScore(this,6)">6</button>
+        <button class="score-btn" onclick="selectScore(this,7)">7</button>
+        <button class="score-btn" onclick="selectScore(this,8)">8</button>
+        <button class="score-btn" onclick="selectScore(this,9)">9</button>
+        <button class="score-btn" onclick="selectScore(this,10)">10</button>
+      </div>
+    </div>
+    <div class="modal-row">
+      <button class="modal-cancel" onclick="closeLogModal()">CANCEL</button>
+      <button class="modal-confirm" onclick="saveLog()">COMMIT</button>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM BAR -->
+<div class="elite-bar">
+  <div class="elite-message" id="elite-message">
+    <span>0.01%</span> of the world's wealth is controlled by ~80,000 people. You have 4 years. Either move or move aside.
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════
+// DATA STRUCTURE
+// ═══════════════════════════════════════════════
+const DOMAINS = [
+  {
+    id: 'd1', num: '01', title: 'Truth & Epistemology', layer: 'Layer 1 · Core',
+    goal: 'See reality better than others',
+    verdict: 'Your decision-making is only as good as your model of reality. Most people operate on noise.',
+    resources: [
+      { id:'r101', type:'book', name:'Superforecasting', author:'Philip Tetlock', insight:'Calibrate probabilities. Track your predictions. Most people never measure how wrong they are.' },
+      { id:'r102', type:'book', name:'Good Strategy Bad Strategy', author:'Richard Rumelt', insight:'Strategy is diagnosis + guiding policy + coherent actions. Most "strategies" are wish lists.' },
+      { id:'r103', type:'book', name:'Seeking Wisdom', author:'Peter Bevelin', insight:'Mental models applied: inversion, second-order thinking, human misjudgment. Munger distilled.' },
+      { id:'r104', type:'book', name:'The Art of Thinking Clearly', author:'Rolf Dobelli', insight:'99 cognitive biases mapped. Run this checklist before any major decision.' },
+      { id:'r105', type:'blog', name:'Farnam Street (Shane Parrish)', author:'fs.blog', insight:'Best mental model repository online. Read the Great Mental Models series first.' },
+      { id:'r106', type:'blog', name:'Paul Graham Essays', author:'paulgraham.com', insight:'How to think about startups, power, status. Essential for understanding Silicon Valley reality.' },
+      { id:'r107', type:'video', name:'Ray Dalio — Principles Talks', author:'YouTube', insight:'How the world machine works. Economic cycles, debt cycles, empire cycles.' },
+      { id:'r108', type:'book', name:'The Black Swan', author:'Nassim Taleb', insight:'Fat tails dominate. Prepare for the unpredictable, not the expected. Build optionality.' },
+    ]
+  },
+  {
+    id: 'd2', num: '02', title: 'Self-Mastery', layer: 'Layer 1 · Core',
+    goal: 'No internal chaos',
+    verdict: 'External wins collapse when internal architecture is weak. This is the hidden leverage point.',
+    resources: [
+      { id:'r201', type:'book', name:'Letting Go', author:'David Hawkins', insight:'Release, not suppress. Map your emotional states to their energetic level. Everything below courage costs you.' },
+      { id:'r202', type:'book', name:'The Courage to Be Disliked', author:'Kishimi & Koga', insight:'Adlerian psychology. Separation of tasks. You control your input, not others\' response.' },
+      { id:'r203', type:'study', name:'Jung — Summaries First, Then Originals', author:'Various', insight:'Shadow work. You cannot lead others through terrain you haven\'t explored in yourself.' },
+      { id:'r204', type:'video', name:'Krishnamurti Talks', author:'YouTube / KFA', insight:'Raw, uncomfortable. Dismantles conditioned thinking. Sit with the discomfort.' },
+      { id:'r205', type:'book', name:'Man\'s Search for Meaning', author:'Viktor Frankl', insight:'Meaning, not pleasure, is the primary motivator. You need a why that survives any what.' },
+      { id:'r206', type:'book', name:'Meditations', author:'Marcus Aurelius', insight:'Stoic practice from someone who ran an empire. Control what you can. Release what you can\'t.' },
+    ]
+  },
+  {
+    id: 'd3', num: '03', title: 'Energy & Physiology', layer: 'Layer 1 · Core',
+    goal: 'Relentless stamina',
+    verdict: 'If your body collapses, the empire collapses. Energy is the substrate of execution.',
+    resources: [
+      { id:'r301', type:'book', name:'Why We Sleep', author:'Matthew Walker', insight:'Sleep deprivation mimics being drunk. Cognitive performance drops 30% on 6hrs. Non-negotiable.' },
+      { id:'r302', type:'book', name:'Outlive', author:'Peter Attia', insight:'The four horsemen: cancer, CVD, T2D, dementia. Intervene decades early. Zone 2 cardio + strength.' },
+      { id:'r303', type:'video', name:'Huberman Lab — Specific Protocols', author:'Andrew Huberman', insight:'Morning light exposure, NSADs timing, cold exposure, focus stacks. Ignore the ads, use the protocols.' },
+      { id:'r304', type:'book', name:'The 4-Hour Body', author:'Tim Ferriss', insight:'Minimum effective dose for body composition. Slow-carb, 80/20 on exercise. Measure, don\'t assume.' },
+    ]
+  },
+  {
+    id: 'd4', num: '04', title: 'Focus & Cognitive Control', layer: 'Layer 1 · Core',
+    goal: 'Outfocus 99% of people',
+    verdict: 'In a distracted world, sustained focus is the most rare and valuable commodity.',
+    resources: [
+      { id:'r401', type:'book', name:'The Mind Illuminated', author:'Culadasa (John Yates)', insight:'Most rigorous meditation manual available. Stages 1–10. Build attention like a muscle, systematically.' },
+      { id:'r402', type:'book', name:'Deep Work', author:'Cal Newport', insight:'Baseline, but apply deeply. Schedule blocks, not tasks. Your best work happens in depth mode.' },
+      { id:'r403', type:'book', name:'Stolen Focus', author:'Johann Hari', insight:'The attention economy is an adversarial system. Know the enemy before designing your defense.' },
+      { id:'r404', type:'practice', name:'Daily Meditation Practice (30+ min)', author:'Practice', insight:'The only way to upgrade your attention hardware. No substitute.' },
+    ]
+  },
+  {
+    id: 'd5', num: '05', title: 'Learning Systems', layer: 'Layer 1 · Core',
+    goal: 'Learn anything fast',
+    verdict: 'Rate of learning is the only sustainable competitive advantage. Everything else commoditizes.',
+    resources: [
+      { id:'r501', type:'book', name:'Peak', author:'Anders Ericsson', insight:'Deliberate practice, not hours. Mental representations are the mechanism. Find the edge of your ability and stay there.' },
+      { id:'r502', type:'book', name:'Ultralearning', author:'Scott Young', insight:'9 principles for self-directed skill acquisition. Directness: do the thing, don\'t study the thing.' },
+      { id:'r503', type:'book', name:'Make It Stick', author:'Brown, Roediger, McDaniel', insight:'Retrieval practice > re-reading. Interleaving > blocked practice. Counter-intuitive, research-backed.' },
+      { id:'r504', type:'book', name:'The First 20 Hours', author:'Josh Kaufman', insight:'For skill acquisition (not expertise): deconstruct, learn enough to self-correct, remove barriers, practice 20hrs.' },
+    ]
+  },
+  {
+    id: 'd6', num: '06', title: 'Communication Mastery', layer: 'Layer 2 · Human Leverage',
+    goal: 'Structure thought and transfer it with precision',
+    verdict: 'If you can\'t communicate it, you don\'t own it. Ideas without distribution are worth zero.',
+    resources: [
+      { id:'r601', type:'book', name:'The Pyramid Principle', author:'Barbara Minto', insight:'SCQA framework. Start with the answer. Structure everything: emails, decks, decisions. McKinsey\'s core tool.' },
+      { id:'r602', type:'book', name:'Made to Stick', author:'Heath Brothers', insight:'SUCCESs: Simple, Unexpected, Concrete, Credible, Emotional, Stories. Why some ideas survive and most don\'t.' },
+      { id:'r603', type:'study', name:'Steve Jobs Presentation Deconstructions', author:'Various analyses', insight:'Villain + Hero narrative. Three acts. Simplicity. The demo as proof. Study: iPhone 2007 keynote.' },
+      { id:'r604', type:'book', name:'Writing That Works', author:'Kenneth Roman', insight:'Business writing stripped to function. If your prose is complex, your thinking is complex.' },
+    ]
+  },
+  {
+    id: 'd7', num: '07', title: 'Persuasion & Negotiation', layer: 'Layer 2 · Human Leverage',
+    goal: 'Move people to action without force',
+    verdict: 'Every deal, hire, investor, and customer is a negotiation. Be incompetent here and bleed everywhere.',
+    resources: [
+      { id:'r701', type:'book', name:'Never Split the Difference', author:'Chris Voss', insight:'Tactical empathy, calibrated questions, mirroring. FBI hostage negotiation applied to business.' },
+      { id:'r702', type:'book', name:'Influence', author:'Robert Cialdini', insight:'The 7 principles of influence. Know them to resist them and to deploy them consciously.' },
+      { id:'r703', type:'book', name:'Getting to Yes', author:'Fisher & Ury', insight:'BATNA. Separate people from problems. Interests, not positions. Baseline but foundational.' },
+      { id:'r704', type:'observe', name:'Real Negotiations — Podcasts & Interviews', author:'Various', insight:'Watch how top operators actually negotiate. Theory without observation is dead weight.' },
+      { id:'r705', type:'book', name:'Pitch Anything', author:'Oren Klaff', insight:'Frame control. How the croc brain works. Why logic alone fails in high-stakes pitches.' },
+    ]
+  },
+  {
+    id: 'd8', num: '08', title: 'Psychology & Hidden Motives', layer: 'Layer 2 · Human Leverage',
+    goal: 'Read the real game being played',
+    verdict: 'People say what they want to believe. They do what their incentives demand. Read the incentives.',
+    resources: [
+      { id:'r801', type:'book', name:'The Elephant in the Brain', author:'Simler & Hanson', insight:'Hidden motives drive most human behaviour. Health, education, politics — all explained by status-seeking.' },
+      { id:'r802', type:'book', name:'Moral Mazes', author:'Robert Jackall', insight:'How corporations corrupt ethics. Essential for navigating institutional power without being destroyed.' },
+      { id:'r803', type:'book', name:'Thinking, Fast and Slow', author:'Daniel Kahneman', insight:'System 1 vs System 2. Your gut is a pattern-matcher prone to specific, predictable errors. Know which.' },
+      { id:'r804', type:'book', name:'The Righteous Mind', author:'Jonathan Haidt', insight:'Moral foundations theory. Why smart people believe wildly different things. Map their moral matrix.' },
+    ]
+  },
+  {
+    id: 'd9', num: '09', title: 'Power & Game Theory', layer: 'Layer 2 · Human Leverage',
+    goal: 'Understand and navigate power structures',
+    verdict: 'Power flows to those who understand its grammar. Everything else is naivety with consequences.',
+    resources: [
+      { id:'r901', type:'book', name:'The 48 Laws of Power', author:'Robert Greene', insight:'Read it as a field guide to recognise patterns, not as a manual for petty manipulation. Filter hard.' },
+      { id:'r902', type:'book', name:'The Status Game', author:'Will Storr', insight:'Three status games: dominance, virtue, success. Know which game each room is playing.' },
+      { id:'r903', type:'book', name:'The Prince', author:'Machiavelli', insight:'500 years old and still the sharpest political primer. Realpolitik without the moralizing.' },
+      { id:'r904', type:'book', name:'Thinking Strategically', author:'Dixit & Nalebuff', insight:'Game theory made practical. Nash equilibria, commitment devices, credible threats.' },
+      { id:'r905', type:'study', name:'Indian Political Economy — Primary Sources', author:'RBI, SEBI, MOF reports', insight:'Regulatory arbitrage lives in the gap between rule and enforcement. Study that gap.' },
+    ]
+  },
+  {
+    id: 'd10', num: '10', title: 'Network & Relationship Design', layer: 'Layer 2 · Human Leverage',
+    goal: 'Access > effort. Position > intelligence.',
+    verdict: 'Your network is your deal flow. Every major opportunity arrives through a person, not a search engine.',
+    resources: [
+      { id:'r1001', type:'book', name:'Never Eat Alone', author:'Keith Ferrazzi', insight:'Generosity as strategy. Build before you need. Give before you ask. Apply deeply.' },
+      { id:'r1002', type:'book', name:'The Tipping Point', author:'Malcolm Gladwell', insight:'Connectors, Mavens, Salespeople. Know your type. Know who to find.' },
+      { id:'r1003', type:'observe', name:'How Top Indian Founders Build Circles', author:'Observe directly', insight:'Study Kunal Shah, Bhavish Aggarwal, Zepto\'s Palicha. How they create gravity.' },
+      { id:'r1004', type:'practice', name:'Weekly Relationship Maintenance System', author:'Practice', insight:'CRM for humans. Track last contact, context, how you can give value. Relationships decay without maintenance.' },
+    ]
+  },
+  {
+    id: 'd11', num: '11', title: 'Business Strategy', layer: 'Layer 3 · Wealth Engine',
+    goal: 'Build durable competitive moats',
+    verdict: 'Without a power source, every business is a commodity. Identify yours before you build.',
+    resources: [
+      { id:'r1101', type:'book', name:'7 Powers', author:'Hamilton Helmer', insight:'The only 7 sources of durable competitive advantage: scale economies, network effects, switching costs, counter-positioning, branding, cornered resource, process power.' },
+      { id:'r1102', type:'book', name:'Good Strategy Bad Strategy', author:'Richard Rumelt', insight:'Diagnosis is the most neglected step. Most "strategy" is a collection of goals, not a plan.' },
+      { id:'r1103', type:'book', name:'Zero to One', author:'Peter Thiel', insight:'Competition is for losers. Build monopolies. The question: what do you believe that others don\'t?' },
+      { id:'r1104', type:'book', name:'The Innovator\'s Dilemma', author:'Clayton Christensen', insight:'Disruption comes from below. Know when to cannibalize yourself vs defend.' },
+      { id:'r1105', type:'study', name:'Indian Sector Deep Dives', author:'DRHP filings, annual reports', insight:'DRHP filings are the most honest documents a company produces. Read 10 before building in any sector.' },
+    ]
+  },
+  {
+    id: 'd12', num: '12', title: 'Sales', layer: 'Layer 3 · Wealth Engine',
+    goal: 'Revenue is the only feedback that matters',
+    verdict: 'Every founder who fails at sales fails the company. Non-negotiable skill. No exceptions.',
+    resources: [
+      { id:'r1201', type:'book', name:'The Challenger Sale', author:'Dixon & Adamson', insight:'Teach, Tailor, Take Control. The best salespeople reframe the customer\'s reality, not just respond to needs.' },
+      { id:'r1202', type:'book', name:'$100M Offers', author:'Alex Hormozi', insight:'How to make your offer so good people feel stupid saying no. Value equation, dream outcome, perceived probability.' },
+      { id:'r1203', type:'book', name:'SPIN Selling', author:'Neil Rackham', insight:'Situation, Problem, Implication, Need-Payoff. Research-backed. For complex B2B sales.' },
+      { id:'r1204', type:'practice', name:'Live Sales Calls / Pitches Weekly', author:'Practice', insight:'You cannot read your way to sales competence. Volume + deliberate review is the only path.' },
+    ]
+  },
+  {
+    id: 'd13', num: '13', title: 'Marketing & Attention', layer: 'Layer 3 · Wealth Engine',
+    goal: 'Control narrative. Manufacture demand.',
+    verdict: 'The best product doesn\'t win. The best-perceived product wins. Attention is the scarce resource.',
+    resources: [
+      { id:'r1301', type:'book', name:'Alchemy', author:'Rory Sutherland', insight:'Logic is overrated. Irrationality is exploitable. Psychological reframing creates value from nothing.' },
+      { id:'r1302', type:'book', name:'Positioning', author:'Al Ries & Jack Trout', insight:'Position in the mind, not the market. Own a word. First mover in a category is worth more than product quality.' },
+      { id:'r1303', type:'book', name:'Contagious', author:'Jonah Berger', insight:'STEPPS: Social Currency, Triggers, Emotion, Public, Practical Value, Stories. Why things spread.' },
+      { id:'r1304', type:'study', name:'Indian Growth Stories — Jio, Zepto, CRED', author:'Case studies', insight:'How India-specific distribution dynamics work: WhatsApp networks, Bharat vs Metro, vernacular trust.' },
+    ]
+  },
+  {
+    id: 'd14', num: '14', title: 'Leverage', layer: 'Layer 3 · Wealth Engine',
+    goal: 'Scale output beyond personal hours',
+    verdict: 'Labour leverage is 20th century. Code, capital, and media are permissionless. Compound them.',
+    resources: [
+      { id:'r1401', type:'study', name:'Naval Ravikant — Primary Podcasts', author:'Naval.me, Joe Rogan, Tim Ferriss', insight:'Specific knowledge, accountability, leverage, judgement. Read the almanack but listen to the source.' },
+      { id:'r1402', type:'book', name:'High Output Management', author:'Andy Grove', insight:'Manager output = team output. OKRs, 1:1s, leverage points for people management at scale.' },
+      { id:'r1403', type:'book', name:'The Lean Startup', author:'Eric Ries', insight:'Build-Measure-Learn. MVP is not a product, it\'s an experiment. Validated learning > assumption.' },
+      { id:'r1404', type:'study', name:'Indian VC & NBFC Capital Structures', author:'SEBI AIF regs, VC term sheets', insight:'Understand AIF Cat II/III, NBFC licensing, FDI routes, ESOP structures. Capital access is leverage.' },
+    ]
+  },
+  {
+    id: 'd15', num: '15', title: 'Capital Allocation & Investing', layer: 'Layer 3 · Wealth Engine',
+    goal: 'Make money work harder than you',
+    verdict: 'Accumulation without allocation is entropy. Capital must compound, not sit.',
+    resources: [
+      { id:'r1501', type:'book', name:'Poor Charlie\'s Almanack', author:'Charles Munger', insight:'Mental models, inversion, lollapalooza effects. The most compressed wisdom-to-page ratio of any investment book.' },
+      { id:'r1502', type:'blog', name:'Howard Marks Memos', author:'Oaktree Capital', insight:'The most important concept: where are we in the cycle? Second-level thinking. Risk is not volatility.' },
+      { id:'r1503', type:'study', name:'Buffett Annual Letters', author:'Berkshire Hathaway', insight:'The long arc: owner-operator mindset, moat thinking, circle of competence. Read chronologically.' },
+      { id:'r1504', type:'book', name:'The Intelligent Investor', author:'Benjamin Graham', insight:'Mr. Market allegory. Margin of safety. Price vs value. The philosophical foundation.' },
+      { id:'r1505', type:'study', name:'Indian Small/Mid Cap Deep Dives', author:'Screener.in, BSE filings', insight:'India\'s wealth creation has been in small/mid caps compounders. Study: Page Industries, Astral, Bajaj Finance arcs.' },
+      { id:'r1506', type:'book', name:'The Outsiders', author:'William Thorndike', insight:'8 CEOs who destroyed the market through capital allocation. IRR discipline > charisma.' },
+    ]
+  },
+  {
+    id: 'd16', num: '16', title: 'Systems & Operations', layer: 'Layer 3 · Wealth Engine',
+    goal: 'Make the machine run without you',
+    verdict: 'If the business needs you for daily operations, you own a job, not a company.',
+    resources: [
+      { id:'r1601', type:'book', name:'Amp It Up', author:'Frank Slootman', insight:'Raise standards. Urgency. Narrow focus. Not a management book — a performance manifesto.' },
+      { id:'r1602', type:'study', name:'Toyota Production System', author:'Case Studies', insight:'Kaizen, Just-in-time, Jidoka. The foundation of modern ops excellence. Eliminate waste relentlessly.' },
+      { id:'r1603', type:'book', name:'The E-Myth Revisited', author:'Michael Gerber', insight:'Work on the business, not in it. Systems > heroics. Document every repeatable process.' },
+      { id:'r1604', type:'book', name:'Measure What Matters', author:'John Doerr', insight:'OKR implementation. Google\'s framework. Objective clarity + key result accountability.' },
+    ]
+  },
+  {
+    id: 'd17', num: '17', title: 'Philosophy & Meaning', layer: 'Layer 4 · Long-Term Stability',
+    goal: 'Build a foundation that doesn\'t crack under pressure',
+    verdict: 'Without meaning, extreme success is just a faster route to emptiness. Build the container first.',
+    resources: [
+      { id:'r1701', type:'book', name:'Man\'s Search for Meaning', author:'Viktor Frankl', insight:'Meaning is found in work, love, and suffering. The existential vacuum is real. Don\'t wait to fill it.' },
+      { id:'r1702', type:'study', name:'Nietzsche — Will to Power, Beyond Good & Evil', author:'Selective reading', insight:'Create your own values. Ressentiment vs master morality. The Übermensch is a project, not a destination.' },
+      { id:'r1703', type:'study', name:'Joseph Campbell — Hero\'s Journey', author:'Power of Myth', insight:'Understand the narrative arc your life is following. Recognize the call, the threshold, the return.' },
+      { id:'r1704', type:'book', name:'Tao Te Ching', author:'Lao Tzu', insight:'Wu wei: effortless action. The strongest force is often the softest. Read 10 translations over time.' },
+    ]
+  },
+  {
+    id: 'd18', num: '18', title: 'Identity & Narrative Control', layer: 'Layer 4 · Long-Term Stability',
+    goal: 'Become the story, not chase it',
+    verdict: 'Your identity is either designed or inherited. If you didn\'t design it, someone else did.',
+    resources: [
+      { id:'r1801', type:'practice', name:'Structured Daily Journaling', author:'Practice', insight:'Reflection without structure is venting. Use prompts: What did I learn? What assumption did I challenge? What am I avoiding?' },
+      { id:'r1802', type:'study', name:'Founder Life Arcs — Not Just Success Stories', author:'Biographies', insight:'Study the failure points: Elon\'s Tesla near-death, Reed Hastings\' Qwikster disaster, Bezos\' Fire Phone.' },
+      { id:'r1803', type:'book', name:'The Untethered Soul', author:'Michael Singer', insight:'The witness perspective. You are not your thoughts. Identity plasticity is a skill.' },
+      { id:'r1804', type:'book', name:'Ego Is the Enemy', author:'Ryan Holiday', insight:'Ego is the enemy of: learning as a student, performance as a practitioner, greatness at the summit.' },
+    ]
+  },
+  {
+    id: 'd19', num: '19', title: 'Taste & Aesthetic Judgment', layer: 'Bonus · Ultra-Elite',
+    goal: 'Build things that feel inevitable, not just functional',
+    verdict: 'Taste is the hidden variable between good and Apple. It takes intentional exposure to develop.',
+    resources: [
+      { id:'r1901', type:'study', name:'Steve Jobs — Walter Isaacson Biography', author:'Isaacson', insight:'Taste as a management tool. Product as art. The intersection of humanities and technology.' },
+      { id:'r1902', type:'study', name:'Dieter Rams — 10 Principles of Good Design', author:'Vitsœ', insight:'Less but better. Good design is honest. Study every principle and find violations in your own work.' },
+      { id:'r1903', type:'observe', name:'Design-Led Company Deep Dives', author:'Apple, Teenage Engineering, Braun', insight:'Study annual reports, product launches, and criticism. Develop vocabulary for what you\'re seeing.' },
+      { id:'r1904', type:'study', name:'Indian Design Aesthetic — Craft to Digital', author:'NID, Manish Arora, Paper Boat', insight:'The Indian consumer has evolved. Study brands that cracked the Indian aesthetic code.' },
+    ]
+  },
+  {
+    id: 'd20', num: '20', title: 'Timing & Luck Recognition', layer: 'Bonus · Ultra-Elite',
+    goal: 'Know when to push and when to wait',
+    verdict: 'Luck is surface area × time in the game. Timing is the difference between a pioneer and a martyr.',
+    resources: [
+      { id:'r2001', type:'study', name:'Venture Cycles — Historical Analysis', author:'Fred Wilson, a16z archives', insight:'Study the 10-year cycles: dot-com, mobile, SaaS, AI. What patterns repeat. India\'s cycles lag by 5–7 years.' },
+      { id:'r2002', type:'blog', name:'Ben Horowitz — Older Posts', author:'a16z.com', insight:'Peace vs wartime CEO. When to be aggressive vs defensive. Hard-won operational wisdom.' },
+      { id:'r2003', type:'book', name:'The Alchemy of Air', author:'Thomas Hager', insight:'How the Haber-Bosch process changed the world. Timing, resources, and adjacent possibility.' },
+      { id:'r2004', type:'study', name:'India Macro — RBI, IMF, MOSPI Data', author:'Primary sources', insight:'GDP cycle, credit cycle, policy cycle. India\'s 2025–2030 window is unlike anything before.' },
+    ]
+  },
+  {
+    id: 'd21', num: '21', title: 'Resilience Under Extreme Pressure', layer: 'Bonus · Ultra-Elite',
+    goal: 'Stay functional when everything breaks',
+    verdict: 'Everyone performs well when things are easy. The 0.01% gap opens under extreme duress.',
+    resources: [
+      { id:'r2101', type:'study', name:'Founder Failure Stories — Primary Accounts', author:'How I Built This, Masters of Scale', insight:'Bezos, Jobs\' exile, Musk\'s 2008. Study the exact mechanics of how they held together.' },
+      { id:'r2102', type:'book', name:'Extreme Ownership', author:'Jocko Willink & Leif Babin', insight:'Leadership under fire. Decentralized command. Own everything, explain nothing.' },
+      { id:'r2103', type:'book', name:'The Obstacle Is the Way', author:'Ryan Holiday', insight:'Stoic resilience framework. Perception, action, will. Suffering as signal, not noise.' },
+      { id:'r2104', type:'book', name:'Can\'t Hurt Me', author:'David Goggins', insight:'The 40% rule. When your mind says stop, you are at 40% capacity. Brute empiricism about limits.' },
+    ]
+  },
+  {
+    id: 'd22', num: '22', title: 'Speed of Execution', layer: 'Bonus · Ultra-Elite',
+    goal: 'Compress time between decision and action',
+    verdict: 'Speed is a moat. At high velocity, you learn faster than competition. Done beats perfect in most markets.',
+    resources: [
+      { id:'r2201', type:'study', name:'Elon Musk — First Principles Execution', author:'Walter Isaacson bio', insight:'Manufacturing as software. The algorithm: question every requirement, delete, simplify, accelerate, automate.' },
+      { id:'r2202', type:'book', name:'Amp It Up', author:'Frank Slootman', insight:'Raise the pace. Shorten cycles. Urgency is a leadership decision, not a market condition.' },
+      { id:'r2203', type:'study', name:'Zepto, Blinkit — India Speed Case Studies', author:'Interviews, Inc42', insight:'How 10-min delivery broke the model. Speed as the product, not a feature.' },
+      { id:'r2204', type:'book', name:'The Hard Thing About Hard Things', author:'Ben Horowitz', insight:'When to slow down (culture) vs speed up (market). The CEO\'s hardest calibration.' },
+    ]
+  },
+];
+
+
+// ═══════════════════════════════════════════════
+// LAYER DEFINITIONS
+// ═══════════════════════════════════════════════
+const LAYERS = [
+  { id: 'L1', label: 'Layer 1 · Core', domainIds: ['d1','d2','d3','d4','d5'] },
+  { id: 'L2', label: 'Layer 2 · Human Leverage', domainIds: ['d6','d7','d8','d9','d10'] },
+  { id: 'L3', label: 'Layer 3 · Wealth Engine', domainIds: ['d11','d12','d13','d14','d15','d16'] },
+  { id: 'L4', label: 'Layer 4 · Stability', domainIds: ['d17','d18'] },
+  { id: 'L5', label: 'Bonus · Ultra-Elite', domainIds: ['d19','d20','d21','d22'] },
+  { id: 'L6', label: 'Personal Pathway', domainIds: ['d_pp'] },
+];
+let activeLayerId = 'ALL';
+// ═══════════════════════════════════════════════
+// STATE MANAGEMENT
+// ═══════════════════════════════════════════════
+let state = {
+  statuses: {},
+  notes: {},
+  logs: [],
+  startDate: null,
+  currentNoteId: null,
+  personalResources: [],
+};
+
+function loadState() {
+  try {
+    const saved = localStorage.getItem('os_state_v2');
+    if (saved) state = { ...state, ...JSON.parse(saved) };
+    if (!state.startDate) state.startDate = new Date().toISOString();
+    if (!state.personalResources) state.personalResources = [];
+  } catch(e) {}
+}
+
+function saveState() {
+  localStorage.setItem('os_state_v2', JSON.stringify(state));
+}
+
+// ═══════════════════════════════════════════════
+// RENDER TRACKER
+// ═══════════════════════════════════════════════
+function renderTracker() {
+  const panel = document.getElementById('tracker-panel');
+  panel.innerHTML = '';
+
+  const allDomains = [...DOMAINS, getPersonalDomain()];
+
+  // Filter by active layer
+  const visibleDomains = activeLayerId === 'ALL'
+    ? allDomains
+    : allDomains.filter(d => {
+        const layer = LAYERS.find(l => l.id === activeLayerId);
+        return layer && layer.domainIds.includes(d.id);
+      });
+
+  visibleDomains.forEach((domain, idx) => {
+    const section = document.createElement('div');
+    section.className = 'domain-section domain-anchor';
+    section.id = domain.id;
+
+    const resources = domain.id === 'd_pp' ? state.personalResources : domain.resources;
+    const doneCount = resources.filter(r => state.statuses[r.id] === 'done').length;
+    const pct = resources.length > 0 ? Math.round((doneCount / resources.length) * 100) : 0;
+
+    const isPersonal = domain.id === 'd_pp';
+
+    section.innerHTML = `
+      <div class="domain-header">
+        <div class="domain-num">${domain.num}</div>
+        <div>
+          <div class="domain-title">${domain.title}</div>
+          <div style="font-size:12px;color:#8a8a7c;margin-top:3px;font-family:'DM Mono',monospace;letter-spacing:0.5px;">${domain.goal}</div>
+        </div>
+        <div style="margin-left:auto;text-align:right;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent);letter-spacing:2px;">${pct}%</div>
+          <div class="domain-progress-bar" style="margin-left:auto;">
+            <div class="domain-progress-fill" style="width:${pct}%"></div>
+          </div>
+        </div>
+      </div>
+      <div style="background:rgba(200,169,110,0.07);border:1px solid rgba(200,169,110,0.2);border-radius:4px;padding:12px 16px;margin-bottom:18px;font-size:13px;color:#9a9a8a;line-height:1.6;">
+        ⚔ ${domain.verdict}
+      </div>
+      ${isPersonal ? `<div style="margin-bottom:16px;"><button class="btn-upload-ebook" onclick="openEbookModal()">📖 + ADD FROM EBOOK</button></div>` : ''}
+      <div class="resource-grid" id="grid-${domain.id}"></div>
+      ${isPersonal && resources.length === 0 ? `<div class="pp-empty">No personal resources yet.<br>Upload any ebook and Claude will generate a full mental model for it.</div>` : ''}
+      ${idx < visibleDomains.length - 1 ? '<div class="section-separator"></div>' : ''}
+    `;
+
+    panel.appendChild(section);
+
+    const grid = section.querySelector(`#grid-${domain.id}`);
+    resources.forEach(r => {
+      grid.appendChild(renderCard(r, domain));
+    });
+  });
+}
+
+function getPersonalDomain() {
+  return {
+    id: 'd_pp', num: '★', title: 'Personal Pathway',
+    layer: 'Layer 5 · Personal Pathway',
+    goal: 'Your private intelligence layer — built from what you read',
+    verdict: 'The books no one else in your space is reading are your asymmetric edge. Build your own layer.',
+  };
+}
+
+function renderCard(r, domain) {
+  const status = state.statuses[r.id] || null;
+  const isPersonal = domain.id === 'd_pp';
+  const card = document.createElement('div');
+  card.className = `resource-card ${status === 'done' ? 'done' : status === 'wip' ? 'in-progress' : ''} ${isPersonal ? 'personal' : ''}`;
+  card.id = `card-${r.id}`;
+
+  const hasNote = state.notes[r.id] && state.notes[r.id].insight;
+  const hasMM = (typeof MENTAL_MODELS !== 'undefined' && MENTAL_MODELS[r.id]) || r.mm;
+  const safeName = r.name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+  const safeAuthor = (r.author || '').replace(/'/g, "\\'");
+
+  card.innerHTML = `
+    <div class="resource-top">
+      <span class="resource-type type-${r.type || 'book'}">${r.type || 'book'}</span>
+      <div style="flex:1;min-width:0;">
+        <div class="resource-name">${r.name}</div>
+        <div class="resource-author">${r.author || ''}</div>
+      </div>
+    </div>
+    <div class="resource-insight">${r.insight}</div>
+    <div class="resource-actions">
+      <button class="btn-status ${status === 'done' ? 'active-done' : ''}" onclick="setStatus('${r.id}', 'done', this)">✓ DONE</button>
+      <button class="btn-status ${status === 'wip' ? 'active-wip' : ''}" onclick="setStatus('${r.id}', 'wip', this)">» WIP</button>
+      <button class="btn-status ${status === null ? 'active-queued' : ''}" onclick="setStatus('${r.id}', null, this)">– RESET</button>
+      <button class="btn-note" onclick="openNotes('${r.id}', '${safeName}')">${hasNote ? '📝' : '+'} NOTE</button>
+    </div>
+    <button class="btn-read-model" onclick="openReader('${r.id}', ${isPersonal})" style="margin-top:10px;">${isPersonal ? '📖' : '⚡'} READ MODEL</button>
+    ${isPersonal ? `<div style="margin-top:6px;"><button onclick="deletePersonalResource('${r.id}')" style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;padding:3px 8px;background:transparent;border:1px solid var(--border);border-radius:2px;color:var(--muted);cursor:pointer;" onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='var(--muted)'">× REMOVE</button></div>` : ''}
+  `;
+  return card;
+}
+
+function setStatus(resourceId, status, btn) {
+  state.statuses[resourceId] = status;
+  saveState();
+  const card = document.getElementById(`card-${resourceId}`);
+  if (card) {
+    // Preserve personal class
+    const isPersonal = card.classList.contains('personal');
+    card.className = `resource-card ${status === 'done' ? 'done' : status === 'wip' ? 'in-progress' : ''} ${isPersonal ? 'personal' : ''}`;
+    card.querySelectorAll('.btn-status').forEach(b => b.classList.remove('active-done','active-wip','active-queued'));
+    const btns = card.querySelectorAll('.btn-status');
+    if (status === 'done') btns[0].classList.add('active-done');
+    else if (status === 'wip') btns[1].classList.add('active-wip');
+    else btns[2].classList.add('active-queued');
+  }
+  updateStats();
+  updateNavFills();
+}
+
+// ═══════════════════════════════════════════════
+// STATS
+// ═══════════════════════════════════════════════
+function updateStats() {
+  const allResources = [...DOMAINS.flatMap(d => d.resources), ...state.personalResources];
+  const done = allResources.filter(r => state.statuses[r.id] === 'done').length;
+  const wip = allResources.filter(r => state.statuses[r.id] === 'wip').length;
+  const pct = allResources.length > 0 ? Math.round((done / allResources.length) * 100) : 0;
+
+  document.getElementById('total-done').textContent = done;
+  document.getElementById('total-wip').textContent = wip;
+  document.getElementById('total-pct').textContent = pct + '%';
+  document.getElementById('dash-done').textContent = done;
+  document.getElementById('dash-wip').textContent = wip;
+  document.getElementById('dash-total').textContent = allResources.length;
+
+  const verdictEl = document.getElementById('verdict-text');
+  if (pct === 0) verdictEl.textContent = "Begin logging. Until you have data, you have hope — not a plan.";
+  else if (pct < 10) verdictEl.textContent = `${done} resources done. Still in the starting blocks. Speed up.`;
+  else if (pct < 25) verdictEl.textContent = `${pct}% done. Foundation is being laid. Don't mistake motion for progress.`;
+  else if (pct < 50) verdictEl.textContent = `${pct}% done. Past the first quarter. Maintain intensity.`;
+  else if (pct < 75) verdictEl.textContent = `${pct}% done. Majority covered. Depth matters more than breadth now.`;
+  else if (pct < 100) verdictEl.textContent = `${pct}% done. The last 25% separates finishers from the top.`;
+  else verdictEl.textContent = "All resources covered. Depth and application is the only game now. Execute.";
+
+  const messages = [
+    `<span>${done}</span> resources absorbed. <span>${allResources.length - done}</span> remain. The gap is what you do today.`,
+    `<span>0.01%</span> of world wealth. ~80,000 people. 4 years. Either move or move aside.`,
+    `Every resource uncompleted is a lever you refuse to pull.`,
+    `<span>${wip}</span> in progress. Finish before you start more. Depth > breadth.`,
+  ];
+  document.getElementById('elite-message').innerHTML = messages[Math.floor(Math.random() * messages.length)];
+}
+
+function updateNavFills() {
+  DOMAINS.forEach(domain => {
+    const done = domain.resources.filter(r => state.statuses[r.id] === 'done').length;
+    const pct = (done / domain.resources.length) * 100;
+    const el = document.getElementById(`nav-fill-${domain.id}`);
+    if (el) el.style.width = pct + '%';
+  });
+  // Personal pathway
+  const ppDone = state.personalResources.filter(r => state.statuses[r.id] === 'done').length;
+  const ppPct = state.personalResources.length > 0 ? (ppDone / state.personalResources.length) * 100 : 0;
+  const ppEl = document.getElementById('nav-fill-d_pp');
+  if (ppEl) ppEl.style.width = ppPct + '%';
+}
+
+function renderLayerOverview() {
+  const container = document.getElementById('layer-overview');
+  const layers = [
+    { title: 'Layer 1 · Core Foundation', domains: DOMAINS.slice(0,5) },
+    { title: 'Layer 2 · Human Leverage', domains: DOMAINS.slice(5,10) },
+    { title: 'Layer 3 · Wealth Engine', domains: DOMAINS.slice(10,16) },
+    { title: 'Layer 4 · Stability + Bonus', domains: DOMAINS.slice(16) },
+    { title: 'Layer 5 · Personal Pathway', domains: [getPersonalDomain()], personal: true },
+  ];
+
+  container.innerHTML = layers.map(layer => {
+    const bars = layer.domains.map(d => {
+      const resources = d.id === 'd_pp' ? state.personalResources : d.resources;
+      const done = resources.filter(r => state.statuses[r.id] === 'done').length;
+      const pctDone = resources.length > 0 ? (done / resources.length) * 100 : 0;
+      return `<div class="layer-bar-row">
+        <div class="layer-bar-name">${d.title}</div>
+        <div class="layer-bar-track"><div class="layer-bar-fill fill-done" style="width:${pctDone}%"></div></div>
+        <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);width:28px;text-align:right;">${Math.round(pctDone)}%</div>
+      </div>`;
+    }).join('');
+    return `<div class="layer-card"><div class="layer-card-title">${layer.title}</div><div class="layer-bars">${bars}</div></div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════
+// NOTES
+// ═══════════════════════════════════════════════
+function openNotes(resourceId, resourceName) {
+  state.currentNoteId = resourceId;
+  const existing = state.notes[resourceId] || {};
+  document.getElementById('notes-resource-name').textContent = resourceName;
+  document.getElementById('note-insight').value = existing.insight || '';
+  document.getElementById('note-apply').value = existing.apply || '';
+  document.getElementById('note-change').value = existing.change || '';
+  document.getElementById('note-fight').value = existing.fight || '';
+  document.getElementById('notes-panel').classList.add('open');
+}
+
+function closeNotes() {
+  document.getElementById('notes-panel').classList.remove('open');
+  state.currentNoteId = null;
+}
+
+function saveNotes() {
+  if (!state.currentNoteId) return;
+  const noteId = state.currentNoteId;
+  state.notes[noteId] = {
+    insight: document.getElementById('note-insight').value,
+    apply: document.getElementById('note-apply').value,
+    change: document.getElementById('note-change').value,
+    fight: document.getElementById('note-fight').value,
+  };
+  saveState();
+  closeNotes();
+  const card = document.getElementById(`card-${noteId}`);
+  if (card) {
+    const noteBtn = card.querySelector('.btn-note');
+    if (noteBtn) noteBtn.textContent = '📝 NOTE';
+  }
+}
+
+// ═══════════════════════════════════════════════
+// TABS
+// ═══════════════════════════════════════════════
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab')[['tracker','dashboard','log'].indexOf(tab)].classList.add('active');
+
+  const mainGrid = document.getElementById('main-grid');
+  const dashPanel = document.getElementById('dashboard-panel');
+  const logPanel = document.getElementById('log-panel');
+
+  if (tab === 'tracker') {
+    mainGrid.style.display = 'grid';
+    dashPanel.style.display = 'none';
+    logPanel.style.display = 'none';
+  } else if (tab === 'dashboard') {
+    mainGrid.style.display = 'none';
+    dashPanel.style.display = 'block';
+    logPanel.style.display = 'none';
+    renderLayerOverview();
+  } else if (tab === 'log') {
+    mainGrid.style.display = 'none';
+    dashPanel.style.display = 'none';
+    logPanel.style.display = 'block';
+    renderLog();
+  }
+}
+
+// ═══════════════════════════════════════════════
+// NAV — no <a href>, pure JS scroll
+// ═══════════════════════════════════════════════
+function navTo(el) {
+  // Mark active
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  el.classList.add('active');
+
+  const target = el.getAttribute('data-target');
+  if (!target) return;
+
+  // If this target isn't in the current filtered view, switch to its layer first
+  const domainEl = document.getElementById(target);
+  if (!domainEl) {
+    // Find which layer owns this domain and switch to it
+    const layer = LAYERS.find(l => l.domainIds.includes(target));
+    if (layer && layer.id !== activeLayerId) {
+      activeLayerId = layer.id;
+      document.querySelectorAll('.layer-nav-header').forEach(h => h.classList.remove('active'));
+      const layerHeader = document.querySelector('.layer-nav-header[data-layer="' + layer.id + '"]');
+      if (layerHeader) layerHeader.classList.add('active');
+      renderTracker();
+    }
+  }
+
+  // Wait for render then scroll — use requestAnimationFrame for reliability
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      const targetEl = document.getElementById(target);
+      const content = document.getElementById('main-content');
+      if (targetEl && content) {
+        // Use offsetTop relative to content container
+        let offset = 0;
+        let node = targetEl;
+        while (node && node !== content) {
+          offset += node.offsetTop;
+          node = node.offsetParent;
+        }
+        content.scrollTo({ top: offset - 24, behavior: 'smooth' });
+      }
+    });
+  });
+}
+
+function selectLayer(layerId, el) {
+  activeLayerId = layerId;
+  document.querySelectorAll('.layer-nav-header').forEach(h => h.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if (el) el.classList.add('active');
+  renderTracker();
+  const content = document.getElementById('main-content');
+  if (content) content.scrollTo({ top: 0 });
+}
+
+// ═══════════════════════════════════════════════
+// LOG
+// ═══════════════════════════════════════════════
+let selectedScore = null;
+
+function selectScore(btn, score) {
+  selectedScore = score;
+  document.querySelectorAll('.score-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+
+function openLogModal() {
+  selectedScore = null;
+  document.getElementById('log-worked').value = '';
+  document.getElementById('log-insight').value = '';
+  document.getElementById('log-tomorrow').value = '';
+  document.querySelectorAll('.score-btn').forEach(b => b.classList.remove('selected'));
+  document.getElementById('log-modal').classList.add('open');
+}
+
+function closeLogModal() {
+  document.getElementById('log-modal').classList.remove('open');
+}
+
+function saveLog() {
+  const entry = {
+    date: new Date().toISOString(),
+    worked: document.getElementById('log-worked').value,
+    insight: document.getElementById('log-insight').value,
+    tomorrow: document.getElementById('log-tomorrow').value,
+    score: selectedScore || 5,
+  };
+  state.logs.unshift(entry);
+  saveState();
+  closeLogModal();
+  renderLog();
+}
+
+function renderLog() {
+  renderWeekGrid();
+  const container = document.getElementById('log-entries');
+  container.innerHTML = '';
+  if (state.logs.length === 0) {
+    container.innerHTML = `<div style="text-align:center;color:var(--muted);font-family:'DM Mono',monospace;font-size:11px;padding:32px 0;">No entries yet. First log is the hardest.</div>`;
+    return;
+  }
+  state.logs.forEach(entry => {
+    const date = new Date(entry.date);
+    const dateStr = date.toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
+    const div = document.createElement('div');
+    div.className = 'dominance-entry';
+    div.innerHTML = `
+      <div class="dominance-meta">
+        <div class="dominance-date">${dateStr}</div>
+        <div class="dominance-score">${entry.score}/10</div>
+      </div>
+      ${entry.worked ? `<div style="font-size:12px;color:var(--text);margin-bottom:6px;">${entry.worked}</div>` : ''}
+      ${entry.insight ? `<div style="font-size:11px;color:var(--muted);margin-bottom:4px;"><span style="color:var(--accent);">→ </span>${entry.insight}</div>` : ''}
+      ${entry.tomorrow ? `<div style="font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;">TOMORROW: ${entry.tomorrow}</div>` : ''}
+    `;
+    container.appendChild(div);
+  });
+}
+
+function renderWeekGrid() {
+  const labels = ['M','T','W','T','F','S','S'];
+  document.getElementById('week-labels').innerHTML = labels.map(l => `<div class="week-day-label">${l}</div>`).join('');
+  const grid = document.getElementById('week-grid');
+  grid.innerHTML = '';
+  const today = new Date();
+  const days = [];
+  for (let i = 27; i >= 0; i--) {
+    const d = new Date(today);
+    d.setDate(today.getDate() - i);
+    days.push(d);
+  }
+  const logDates = new Set(state.logs.map(l => {
+    const d = new Date(l.date);
+    return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+  }));
+  days.forEach(d => {
+    const key = `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+    const hasLog = logDates.has(key);
+    const dayEl = document.createElement('div');
+    dayEl.className = `week-day ${hasLog ? 'level-4' : ''}`;
+    dayEl.title = d.toLocaleDateString();
+    dayEl.textContent = d.getDate();
+    grid.appendChild(dayEl);
+  });
+  let streak = 0;
+  for (let i = 0; i < 365; i++) {
+    const d2 = new Date(today);
+    d2.setDate(today.getDate() - i);
+    const k = `${d2.getFullYear()}-${d2.getMonth()}-${d2.getDate()}`;
+    if (logDates.has(k)) streak++;
+    else if (i > 0) break;
+  }
+  document.getElementById('streak-val').textContent = streak;
+}
+
+// ═══════════════════════════════════════════════
+// COUNTDOWN
+// ═══════════════════════════════════════════════
+function updateCountdown() {
+  const start = new Date(state.startDate || new Date());
+  const end = new Date(start);
+  end.setFullYear(end.getFullYear() + 4);
+  const now = new Date();
+  const diff = end - now;
+  if (diff <= 0) { document.getElementById('cd-days').textContent = '0'; return; }
+  const days = Math.floor(diff / (1000*60*60*24));
+  const hours = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+  const mins = Math.floor((diff % (1000*60*60)) / (1000*60));
+  const secs = Math.floor((diff % (1000*60)) / 1000);
+  document.getElementById('cd-days').textContent = String(days).padStart(4,'0');
+  document.getElementById('cd-hours').textContent = String(hours).padStart(2,'0');
+  document.getElementById('cd-mins').textContent = String(mins).padStart(2,'0');
+  document.getElementById('cd-secs').textContent = String(secs).padStart(2,'0');
+  const totalMs = end - start;
+  const elapsed = now - start;
+  const pct = Math.min(100, Math.max(0, (elapsed/totalMs)*100));
+  document.getElementById('mission-progress').style.width = pct.toFixed(2) + '%';
+  document.getElementById('mission-pct').textContent = pct.toFixed(1) + '% elapsed';
+}
+
+// ═══════════════════════════════════════════════
+// MODEL READER
+// ═══════════════════════════════════════════════
+function openReader(resourceId, isPersonal) {
+  // 1. Find the MM data — personal resource first, then MENTAL_MODELS global
+  let mm = null;
+  let name = '', author = '';
+
+  if (isPersonal) {
+    const r = state.personalResources.find(x => x.id === resourceId);
+    if (r) { mm = r.mm; name = r.name; author = r.author || ''; }
+  }
+
+  if (!mm && typeof MENTAL_MODELS !== 'undefined' && MENTAL_MODELS[resourceId]) {
+    mm = MENTAL_MODELS[resourceId];
+  }
+
+  if (!mm) {
+    // Show a helpful message in the reader panel itself
+    document.getElementById('reader-title').textContent  = name;
+    document.getElementById('reader-author').textContent = author;
+    document.getElementById('reader-tagline').textContent = '';
+    document.getElementById('reader-book-label').textContent = 'MENTAL MODEL';
+    document.getElementById('reader-core-text').textContent = '';
+    document.getElementById('reader-core-box').style.display = 'none';
+    document.getElementById('reader-parts').innerHTML =
+      '<div style="padding:40px 20px;text-align:center;font-family:\'DM Mono\',monospace;font-size:12px;color:#8a8a7c;line-height:2.2;">' +
+      '<div style="font-size:28px;margin-bottom:16px;">⚡</div>' +
+      '<div style="color:#d4a96e;font-size:13px;margin-bottom:10px;">mentalmodels.js not loaded</div>' +
+      'This file works when both files are in the same folder<br>and served from a web server — not opened directly.<br><br>' +
+      '<strong style="color:#e0ddd4;">To fix:</strong><br>' +
+      '1. Put <code style="color:#d4a96e;">os_tracker.html</code> + <code style="color:#d4a96e;">mentalmodels.js</code> in one folder<br>' +
+      '2. Drag that folder to <a href="https://app.netlify.com/drop" target="_blank" style="color:#d4a96e;">app.netlify.com/drop</a><br>' +
+      '3. Open the Netlify URL — all 90 models load instantly' +
+      '</div>';
+    document.getElementById('reader-bottom').style.display = 'none';
+    document.getElementById('reader-overlay').classList.add('open');
+    document.getElementById('reader-overlay').scrollTop = 0;
+    return;
+  }
+
+  // 2. Resolve title/author — mm.title takes priority over resource name
+  name   = mm.title  || name   || resourceId;
+  author = mm.author || author || '';
+
+  // 3. Fill header
+  document.getElementById('reader-title').textContent  = name;
+  document.getElementById('reader-author').textContent = author;
+  document.getElementById('reader-tagline').textContent = '';
+  document.getElementById('reader-book-label').textContent = 'MENTAL MODEL';
+
+  // 4. Core idea box — key is core_idea in real schema
+  const coreText = mm.core_idea || mm.core || mm.shift || '';
+  document.getElementById('reader-core-text').textContent = coreText;
+  document.getElementById('reader-core-box').style.display = coreText ? 'block' : 'none';
+
+  // 5. Chapters — real schema uses mm.chapters[]
+  //    Each chapter: { title, core, key_ideas[], execution[], avoid[] }
+  //    Fallback: mm.parts[].concepts[] for personal pathway books
+  const partsEl = document.getElementById('reader-parts');
+  partsEl.innerHTML = '';
+
+  const chapters = mm.chapters || null;
+  const parts    = mm.parts    || null;
+
+  if (chapters && chapters.length > 0) {
+    // ── Real mentalmodels.js schema ──
+    chapters.forEach((ch, i) => {
+      const el = document.createElement('div');
+      el.className = 'reader-concept';
+      el.style.marginBottom = '10px';
+
+      const ki = (ch.key_ideas || []).map(k => '<li>' + escHtml(k) + '</li>').join('');
+      const ex = (ch.execution || []).map(e => '<li>' + escHtml(e) + '</li>').join('');
+      const av = (ch.avoid     || []).map(a => '<li>' + escHtml(a) + '</li>').join('');
+
+      el.innerHTML =
+        '<div class="reader-concept-title">' + escHtml(ch.title || ('Chapter ' + (i+1))) + '</div>' +
+        (ch.core ? '<div class="reader-concept-core">' + escHtml(ch.core) + '</div>' : '') +
+        '<div class="reader-cols">' +
+          '<div>' +
+            '<div class="reader-col-head ki">KEY IDEAS</div>' +
+            '<ul class="reader-bullet-list">' + ki + '</ul>' +
+          '</div>' +
+          '<div>' +
+            '<div class="reader-col-head ex">EXECUTE</div>' +
+            '<ul class="reader-bullet-list ex">' + ex + '</ul>' +
+          '</div>' +
+          (av ? '<div>' +
+            '<div class="reader-col-head av">AVOID</div>' +
+            '<ul class="reader-bullet-list av">' + av + '</ul>' +
+          '</div>' : '<div></div>') +
+        '</div>';
+
+      partsEl.appendChild(el);
+    });
+
+  } else if (parts && parts.length > 0) {
+    // ── Personal pathway schema (parts > concepts) ──
+    parts.forEach(part => {
+      const partEl = document.createElement('div');
+      partEl.className = 'reader-part';
+      partEl.innerHTML = '<div class="reader-part-label">' + escHtml(part.title || '') + '</div>';
+
+      (part.concepts || []).forEach(concept => {
+        const el = document.createElement('div');
+        el.className = 'reader-concept';
+        el.style.marginBottom = '10px';
+
+        const ki = (concept.keyIdeas || []).map(k => '<li>' + escHtml(k) + '</li>').join('');
+        const ex = (concept.execute  || []).map(e => '<li>' + escHtml(e) + '</li>').join('');
+        const av = (concept.avoid    || []).map(a => '<li>' + escHtml(a) + '</li>').join('');
+
+        el.innerHTML =
+          '<div class="reader-concept-title">' + escHtml(concept.title || '') + '</div>' +
+          (concept.core ? '<div class="reader-concept-core">' + escHtml(concept.core) + '</div>' : '') +
+          '<div class="reader-cols">' +
+            '<div><div class="reader-col-head ki">KEY IDEAS</div><ul class="reader-bullet-list">' + ki + '</ul></div>' +
+            '<div><div class="reader-col-head ex">EXECUTE</div><ul class="reader-bullet-list ex">' + ex + '</ul></div>' +
+            (av ? '<div><div class="reader-col-head av">AVOID</div><ul class="reader-bullet-list av">' + av + '</ul></div>' : '<div></div>') +
+          '</div>';
+        partEl.appendChild(el);
+      });
+      partsEl.appendChild(partEl);
+    });
+
+  } else if (mm.models) {
+    // ── Old simple fallback (shift/models/execute) ──
+    (mm.models || []).forEach((m, i) => {
+      const colonIdx = m.indexOf(':');
+      const title = colonIdx > -1 ? m.substring(0, colonIdx).trim() : ('Framework ' + (i+1));
+      const text  = colonIdx > -1 ? m.substring(colonIdx+1).trim() : m;
+      const el = document.createElement('div');
+      el.className = 'reader-concept';
+      el.style.marginBottom = '10px';
+      el.innerHTML =
+        '<div class="reader-concept-title">' + escHtml(title) + '</div>' +
+        '<div class="reader-concept-core">' + escHtml(text) + '</div>' +
+        '<div class="reader-cols"><div></div><div>' +
+          '<div class="reader-col-head ex">EXECUTE</div>' +
+          '<ul class="reader-bullet-list ex">' +
+          (mm.execute || []).map(e => '<li>' + escHtml(e) + '</li>').join('') +
+          '</ul></div><div></div></div>';
+      partsEl.appendChild(el);
+    });
+  }
+
+  // 6. Bottom line — key is bottom_line in real schema
+  const bottomItems = mm.bottom_line || mm.bottomLine || (mm.unlock ? [mm.unlock] : []);
+  const bottomList = document.getElementById('reader-bottom-list');
+  bottomList.innerHTML = bottomItems.map(b => '<li>' + escHtml(b) + '</li>').join('');
+  document.getElementById('reader-bottom').style.display = bottomItems.length ? 'block' : 'none';
+
+  // 7. Open
+  document.getElementById('reader-overlay').classList.add('open');
+  document.getElementById('reader-overlay').scrollTop = 0;
+}
+
+// HTML escape helper — prevents XSS and broken layout from apostrophes etc.
+function escHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function closeReader() {
+  document.getElementById('reader-overlay').classList.remove('open');
+}
+
+// ═══════════════════════════════════════════════
+// PERSONAL PATHWAY — EBOOK UPLOAD
+// ═══════════════════════════════════════════════
+let ebookFileText = '';
+
+function openEbookModal() {
+  ebookFileText = '';
+  document.getElementById('ebook-title').value = '';
+  document.getElementById('ebook-author').value = '';
+  document.getElementById('upload-file-name').textContent = '';
+  document.getElementById('ebook-generating').classList.remove('active');
+  document.getElementById('ebook-modal-btns').style.display = 'flex';
+  document.getElementById('ebook-modal').classList.add('open');
+}
+
+function closeEbookModal() {
+  document.getElementById('ebook-modal').classList.remove('open');
+}
+
+function handleDragOver(e) {
+  e.preventDefault();
+  document.getElementById('upload-zone').classList.add('dragover');
+}
+
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('upload-zone').classList.remove('dragover');
+  const file = e.dataTransfer.files[0];
+  if (file) processEbookFile(file);
+}
+
+function handleFileSelect(input) {
+  if (input.files[0]) processEbookFile(input.files[0]);
+}
+
+function processEbookFile(file) {
+  document.getElementById('upload-file-name').textContent = '✓ ' + file.name;
+  if (!document.getElementById('ebook-title').value) {
+    document.getElementById('ebook-title').value = file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
+  }
+  const reader = new FileReader();
+  reader.onload = e => { ebookFileText = e.target.result || ''; };
+  reader.onerror = () => { ebookFileText = ''; };
+  reader.readAsText(file);
+}
+
+async function generateMentalModel() {
+  const title = document.getElementById('ebook-title').value.trim();
+  const author = document.getElementById('ebook-author').value.trim();
+  if (!title) { alert('Please enter a book title.'); return; }
+
+  const textSample = ebookFileText ? ebookFileText.substring(0, 10000) : '';
+
+  document.getElementById('ebook-generating').classList.add('active');
+  document.getElementById('ebook-modal-btns').style.display = 'none';
+
+  const statuses = ['Reading your book...','Extracting frameworks...','Mapping execution steps...','Building mental model...','Almost done...'];
+  let si = 0;
+  const statusEl = document.getElementById('gen-status');
+  statusEl.textContent = statuses[0];
+  const statusInterval = setInterval(() => { si++; statusEl.textContent = statuses[Math.min(si, statuses.length-1)]; }, 2200);
+
+  const bookText = textSample ? ('\n\nBook content sample:\n' + textSample) : '';
+
+  // Schema must exactly match mentalmodels.js format
+  const schemaExample = '{'
+    + '"title": "' + title + '",'
+    + '"author": "' + (author || 'Unknown') + '",'
+    + '"core_idea": "2-3 sentences. The single most important insight from this entire book. What makes it worth reading.",'
+    + '"chapters": ['
+    + '  {'
+    + '    "title": "Chapter or Concept Name",'
+    + '    "core": "1-2 sentence core insight for this specific chapter/concept. The thing worth remembering.",'
+    + '    "key_ideas": ["Memorable idea 1 — specific and concrete", "Memorable idea 2", "Memorable idea 3"],'
+    + '    "execution": ["Specific action you can take this week — measurable output", "Second action with a deadline or metric", "Third action — concrete, no vagueness"],'
+    + '    "avoid": ["Specific mistake people make here", "Second specific mistake"]'
+    + '  }'
+    + '],'
+    + '"bottom_line": ["Most important takeaway 1", "Most important takeaway 2", "Most important takeaway 3", "Most important takeaway 4"]'
+    + '}';
+
+  const prompt = 'You are building a high-execution mental model for a book. This will be displayed in a reader UI that someone uses BEFORE and WHILE reading the book — so they can execute immediately.\n\n'
+    + 'Book: "' + title + '"' + (author ? ' by ' + author : '') + bookText + '\n\n'
+    + 'REQUIREMENTS:\n'
+    + '- Extract every major chapter, rule, concept, or framework from the book\n'
+    + '- Each chapter entry: a memorable title, a brutal 1-2 sentence core insight, 3 key_ideas (memorable, quotable), 3 execution steps (specific enough to do this week), 2 avoid mistakes (specific, not vague)\n'
+    + '- core_idea: the single most important sentence about why this book matters\n'
+    + '- bottom_line: 4 sentences — the reader should be able to act on this book after reading just these 4 lines\n'
+    + '- Voice: direct, Dan Koe style — written for an ambitious builder, not a student\n'
+    + '- Do NOT skip chapters or merge too many together — depth matters\n\n'
+    + 'Return ONLY valid JSON. No markdown. No backticks. No explanation. Exactly this schema:\n'
+    + schemaExample;
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 4000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    clearInterval(statusInterval);
+
+    if (!response.ok) {
+      const err = await response.text();
+      throw new Error('API error ' + response.status + ': ' + err.substring(0, 200));
+    }
+
+    const data = await response.json();
+    const rawText = data.content?.find(b => b.type === 'text')?.text || '';
+
+    let mm;
+    try {
+      const cleaned = rawText.replace(/```json|```/g, '').trim();
+      mm = JSON.parse(cleaned);
+    } catch(e) {
+      throw new Error('Parse error. Got: ' + rawText.substring(0, 300));
+    }
+
+    const resourceId = 'pp_' + Date.now();
+    const insight = mm.core_idea || mm.core || mm.tagline || 'Personal pathway resource.';
+
+    state.personalResources.push({
+      id: resourceId,
+      type: 'book',
+      name: title,
+      author: author || 'Unknown',
+      insight: insight.substring(0, 160),
+      mm: mm,
+    });
+    saveState();
+
+    closeEbookModal();
+    renderTracker();
+    updateStats();
+    updateNavFills();
+
+    setTimeout(() => {
+      const ppEl = document.getElementById('d_pp');
+      const content = document.getElementById('main-content');
+      if (ppEl && content) content.scrollTo({ top: ppEl.offsetTop - 20, behavior: 'smooth' });
+    }, 300);
+
+  } catch(err) {
+    clearInterval(statusInterval);
+    document.getElementById('ebook-generating').classList.remove('active');
+    document.getElementById('ebook-modal-btns').style.display = 'flex';
+    statusEl.textContent = 'Error — try again';
+    console.error(err);
+    alert('Generation failed: ' + err.message + '\n\nThe API requires this file to be hosted on a web server — not opened as a local file. Use GitHub Pages, Netlify, or any free host.');
+  }
+}
+
+function deletePersonalResource(resourceId) {
+  if (!confirm('Remove this resource from your Personal Pathway?')) return;
+  state.personalResources = state.personalResources.filter(r => r.id !== resourceId);
+  delete state.statuses[resourceId];
+  delete state.notes[resourceId];
+  saveState();
+  renderTracker();
+  updateStats();
+  updateNavFills();
+}
+
+
+
+// ═══════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════
+loadState();
+renderTracker();
+updateStats();
+updateNavFills();
+renderLayerOverview();
+updateCountdown();
+setInterval(updateCountdown, 1000);
+</script>
+<script src="mentalmodels.js"></script>
+</body>
+</html>
